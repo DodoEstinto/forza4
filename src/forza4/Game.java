@@ -5,6 +5,12 @@
  */
 package forza4;
 
+import java.awt.GridLayout;
+import javax.swing.JFrame;
+import javax.swing.JPanel;
+
+
+
 /**
  *
  * @author AdSumPro
@@ -15,7 +21,8 @@ public class Game {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        // TODO code application logic here
+        GameScreen gameScreen=new GameScreen("Forza 4");
+        gameScreen.setVisible(true);
     }
     
 }
