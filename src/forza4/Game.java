@@ -5,6 +5,7 @@
  */
 package forza4;
 
+import java.awt.Color;
 import java.awt.GridLayout;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -20,9 +21,25 @@ public class Game {
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) {
-        GameScreen gameScreen=new GameScreen("Forza 4");
-        gameScreen.setVisible(true);
+    public static void main(String[] args) throws InterruptedException {
+       GameScreen gameScreen=new GameScreen("Forza 4");
+       gameScreen.setVisible(true);
+       
+       
+       //TEST PER IL REPAINT
+       /**
+       JFrame frame= new JFrame("ciao");
+       Tile tile=new Tile("tile");
+       frame.add(tile);
+       frame.setVisible(true);
+       frame.setSize(300, 300);
+       tile.setBackground(Color.red);
+       while(true){
+       Thread.sleep(200);
+       tile.repaint();
+       }
+       **/
+        
     }
     
 }
