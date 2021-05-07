@@ -22,8 +22,8 @@ public class Game {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws InterruptedException {
-       GameScreen gameScreen=new GameScreen("Forza 4");
-       gameScreen.setVisible(true);
+        GameManager gm=new GameManager();
+        gm.startGame();
        
        
        //TEST PER IL REPAINT
