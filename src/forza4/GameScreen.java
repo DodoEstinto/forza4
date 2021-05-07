@@ -54,7 +54,10 @@ public class GameScreen extends JFrame{
             button.setBackground(Color.yellow);
             button.setSize(50,50);
             button.setBorder(new LineBorder(GameScreen.borderColor));
+            button.setActionCommand(Integer.toString(currentColumn));
+            button.addActionListener(new ButtonListener());
             gamePanel.add(button);
+            
         }
     }
       
