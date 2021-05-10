@@ -12,14 +12,16 @@ package forza4;
 public class GameManager {
     
     GameScreen gs;
+    GameGrid gg;
     
     public GameManager(){
     
     }
     
     public void startGame(){
-
-        gs=new GameScreen("Forza 4");
+        gg=new GameGrid();
+        gs=new GameScreen("Forza 4",gg);
         gs.setVisible(true);
+       
     }
 }
