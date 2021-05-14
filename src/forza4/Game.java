@@ -24,7 +24,7 @@ public class Game {
     public static void main(String[] args) throws InterruptedException {
         GameManager gm=new GameManager();
         gm.startGame();
-       
+        
        
        //TEST PER IL REPAINT
        /**
