@@ -101,6 +101,11 @@ public class Tile extends JPanel {
         this.status = status;
     }
     
+    public void reset(){
+        status=STATUS_VOID;
+        
+    }
+    
     
 }
 

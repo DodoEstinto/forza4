@@ -20,7 +20,7 @@ public class GameManager {
     
     public void startGame(){
         gg=new GameGrid();
-        gs=new GameScreen("Forza 4",gg);
+        gs=new GameScreen("Forza 4","Player 1","Player 2");
         gs.setVisible(true);
        
     }
