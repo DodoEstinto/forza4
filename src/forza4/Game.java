@@ -5,10 +5,7 @@
  */
 package forza4;
 
-import java.awt.Color;
-import java.awt.GridLayout;
-import javax.swing.JFrame;
-import javax.swing.JPanel;
+
 
 
 
@@ -24,21 +21,7 @@ public class Game {
     public static void main(String[] args) throws InterruptedException {
         GameManager gm=new GameManager();
         gm.startGame();
-        
-       
-       //TEST PER IL REPAINT
-       /**
-       JFrame frame= new JFrame("ciao");
-       Tile tile=new Tile("tile");
-       frame.add(tile);
-       frame.setVisible(true);
-       frame.setSize(300, 300);
-       tile.setBackground(Color.red);
-       while(true){
-       Thread.sleep(200);
-       tile.repaint();
-       }
-       **/
+
         
     }
     

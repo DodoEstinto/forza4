@@ -11,17 +11,16 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.io.PrintWriter;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JPanel;
 
 /**
  *
  * @author AdSumPro
  */
 public class FileManager {
-    private static String path="./";
+    private static final String path="./saved/";
+    private static final String extention=".f4";
     
     /**
      * 0=Nome gia usato.
@@ -36,7 +35,7 @@ public class FileManager {
      */
     protected static int save(int[][] grid,int player,String name){
         int ris;
-        File f=new File(path+name+".f4");
+        File f=new File(path+name+extention);
         if(!f.exists()){
             try {
                 f.createNewFile();

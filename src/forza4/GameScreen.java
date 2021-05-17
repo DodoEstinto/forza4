@@ -11,7 +11,6 @@ import java.awt.Component;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.Serializable;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -25,39 +24,105 @@ import javax.swing.border.LineBorder;
 
 
 /**
- *
+ * The GameScreen class rappresent a connect four game.
+ * It handle the creation of the GUI and the interaction of the players with the game.
  * @author AdSumPro
  */
 public class GameScreen extends JFrame{
     
-    
+    /**
+     * The number of columns of the GUI grid.
+     */
     public static final int X_SIZE=7;
+    /**
+     * The number of rows of the GUI grid.
+     */
     public static final int Y_SIZE=7;
+    /**
+     * The prefix that identifies the buttons.
+     */
     private static final String BUTTON_PREFIX="Button";
+    /**
+     * The prefix that identifies the tiles.
+     */
     private static final String TILE_PREFIX="Tile";
+    /**
+     * The separator used in the identificators of buttons and tiles.
+     */
     private static final String SEPARATOR="_";
+    /**
+     * The color of the background.
+     */
     private static Color backgroundColor;
+    /**
+     * The color of the grid.
+     */
     private static Color gridColor;
+    /**
+     * The color of the borders.
+     */
     private static Color borderColor;
+    /**
+     * The color of the player 1.
+     */
     private static Color player1Color;
+    /**
+     * The color of the player 2.
+     */
     private static Color player2Color;
+    /**
+     * The color of the buttons.
+     */
     private static Color buttonColor;
+    /**
+     * The color of the text of the buttons.
+     */
     private static Color textButtonColor;
+    /**
+     * The name of the player1.
+     */
+    private String player1Name;
+    /**
+     * The name of the player2.
+     */
+    private String player2Name;
+    private String title;
+    /**
+     * The logic grid.
+     */
     private  GameGrid grid;
+    /**
+     * The panel that contains all the game element.
+     */
     private JPanel gamePanel;
-    
-    //test
+    /**
+     * The actual GameScreen.
+     */
     private GameScreen thisGS;
     
-    public GameScreen(String title,GameGrid grid){
+    /**
+     * Create a GameScreen object with a title and a grid.
+     * @param title the title of the game.
+     * @param player1Name the name of the player 1.
+     * @param player2Name the name of the player 2.
+     */
+    public GameScreen(String title,String player1Name,String player2Name){
         super(title);
-        this.grid=grid;
+        this.grid=new GameGrid();
+        this.player1Name=player1Name;
+        this.player2Name=player2Name;
+        String playerName= grid.getCurrentPlayer()==1? player1Name:player2Name;
+        this.title=title;
         thisGS=this;
         init();           
         }
+    
+    
 
    
-    
+    /**
+     * Init all the components of the GameScreen
+     */
     private void init(){
         this.setSize(1000,1000);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -70,7 +135,10 @@ public class GameScreen extends JFrame{
         repaint();
     }
     
-    
+    /**
+     * Add the buttons to a given JPanel.
+     * @param gamePanel the JPanel.
+     */
     private void addButtons(JPanel gamePanel){        
         for(int currentColumn=0;currentColumn<X_SIZE;currentColumn++){
             String name=BUTTON_PREFIX+SEPARATOR+currentColumn;
@@ -144,6 +212,8 @@ public class GameScreen extends JFrame{
                         }
                         //cambia player
                         grid.changeCurrentPlayer();
+                        String playerName= grid.getCurrentPlayer()==1? player1Name:player2Name;
+                        thisGS.setTitle(title+" - "+playerName);
                     }
                     //repaint per mostrare le modifiche
                     repaint();
@@ -153,7 +223,10 @@ public class GameScreen extends JFrame{
             
         }
     }
-      
+    /**
+     * Add the tiles to a given JPanel.
+     * @param gamePanel the JPanel
+     */
     private void addTiles(JPanel gamePanel){
         for(int currentRow=1;currentRow<Y_SIZE;currentRow++){ //La prima è occupata dai bottoni
             for(int currentColumn=0;currentColumn<X_SIZE;currentColumn++){
@@ -165,7 +238,9 @@ public class GameScreen extends JFrame{
             }
         }
     }
-    
+    /**
+     * Set the default colors.
+     */
     private void setColors(){
     
         backgroundColor=Color.WHITE;
@@ -177,35 +252,60 @@ public class GameScreen extends JFrame{
         textButtonColor=Color.WHITE;
     
     }
-    
+    /**
+     * Returns the background color.
+     * @return the background color.
+     */
     public static Color getBackgroundColor() {
         return backgroundColor;
     }
-
+    /**
+     * Set the background color.
+     * @param backgroundColor the background color.
+     */
     public static void setBackgroundColor(Color backgroundColor) {
         GameScreen.backgroundColor = backgroundColor;
     }
-
+    /**
+     * Returns the border color.
+     * @return the border color.
+     */
     public static Color getBorderColor() {
         return borderColor;
     }
 
+    /**
+     * Set the border color.
+     * @param borderColor the border color.
+     */
     public static void setBorderColor(Color borderColor) {
         GameScreen.borderColor = borderColor;
     }
-
+    /**
+     * Get the player 1 color.
+     * @return the player 1 color.
+     */
     public static Color getPlayer1Color() {
         return player1Color;
     }
-
+    /**
+     * Set the player 1 color.
+     * @param player1Color the player 1 color.
+     */
     public static void setPlayer1Color(Color player1Color) {
         GameScreen.player1Color = player1Color;
     }
-
+    /**
+     * Get the player 2 color.
+     * @return the player 2 color.
+     */
     public static Color getPlayer2Color() {
         return player2Color;
     }
-
+    /**
+     * Set the player 2 color.
+     * @param player2Color the player 2 color.
+     */
     public static void setPlayer2Color(Color player2Color) {
         GameScreen.player2Color = player2Color;
     }
@@ -258,27 +358,20 @@ public class GameScreen extends JFrame{
                             gameName=JOptionPane.showInputDialog(thisGS,"Choose the name of the game:","NewGame1");
                             int save;
                             save=FileManager.save(grid.getGrid(),grid.getCurrentPlayer(),gameName);
-                            System.out.println(save);
+                            if(save==0){
+                                
+                            }
                             break;
                         case "loadGame":
                             gameName=JOptionPane.showInputDialog(thisGS,"Choose the name of the game:","NewGame1");
                             SavedGame sg = FileManager.load(gameName);
                             if(sg!=null){
-                                //GameGrid newGrid=new GameGrid();
-                                //newGrid.setGrid(sg.getGrid());
-                                //grid.setGrid(newGrid);
-                                //thisGS.remove(gamePanel);
-                                //thisGS.add(newPanel);
-                                //gamePanel=newPanel;
-                                //GameScreen newGS=new GameScreen(gameName,newGrid);
-                                //newGS.setVisible(true);
-                                //thisGS.dispose();
                                 grid.setGrid(sg.getGrid());
                                 reset(gamePanel.getComponents(),false);
                                 checkStatus();
                                 repaint();
                             }else{
-                                JOptionPane.showMessageDialog(thisGS,"Partita non trovata o corrotta","Partita non caricata",JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(thisGS,"Partita non trovata o corrotta","Impossibile caricare la partita",JOptionPane.ERROR_MESSAGE);
                             }
                             break;
                         case "exit":

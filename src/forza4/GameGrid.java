@@ -14,7 +14,7 @@ import java.util.Arrays;
 public class GameGrid {
 
     /**
-     * Number of column of elements of the grid.
+     * The number of column of elements of the grid.
      */
     public static final int X_SIZE = 7;
     /**
@@ -71,6 +71,9 @@ public class GameGrid {
         currentPlayer = 1;
     }
 
+    /**
+     * Reset the actual grid.
+     */
     public void reset() {
         grid = new int[X_SIZE][Y_SIZE];
         leftPieces = X_SIZE * Y_SIZE;
@@ -308,9 +311,40 @@ public class GameGrid {
     }
 
     
-    //TODO:  CALCOLARE LE NUOVE CASELLE VUOTE!
-    public void setGrid(int[][] grid) {
-        this.grid = grid;
+    //TODO:  FARE IL DEBUG DELLE LE NUOVE CASELLE VUOTE!
+    /**
+     *
+     * @param grid
+     * @return
+     */
+    public boolean setGrid(int[][] grid) {
+        boolean ris=true;
+        int tilesTemp=X_SIZE*Y_SIZE;
+            if(grid!=null && grid.length==X_SIZE ){
+                for(int[] column:grid){              
+                    if(column==null || column.length!=Y_SIZE){
+                        ris=false;
+                        break;
+                    }else{
+                    
+                        for(int row:column){
+                            if(row!=0){
+                                tilesTemp--;
+                            }
+                        }
+                    
+                    }
+                
+                }
+            }else{
+                ris=false;
+            }
+        
+        if(ris){
+            this.grid = grid;
+            leftPieces=tilesTemp;
+        }
+        return ris;
     }
 
     
