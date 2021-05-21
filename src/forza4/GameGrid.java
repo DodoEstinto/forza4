@@ -8,8 +8,11 @@ package forza4;
 import java.util.Arrays;
 
 /**
+ * This class manage the logic grid of connect four games. It handles the
+ * creation of the grid, the insertion of the values in the grid, the victory
+ * logic and check, and manage to keep the integrity of the values in the grid.
  *
- * @author AdSumPro
+ * @author Paossi Davide
  */
 public class GameGrid {
 
@@ -68,7 +71,7 @@ public class GameGrid {
     public GameGrid() {
         grid = new int[X_SIZE][Y_SIZE];
         leftPieces = X_SIZE * Y_SIZE;
-        currentPlayer = 1;
+        currentPlayer = randomPlayer();
     }
 
     /**
@@ -77,7 +80,17 @@ public class GameGrid {
     public void reset() {
         grid = new int[X_SIZE][Y_SIZE];
         leftPieces = X_SIZE * Y_SIZE;
-        currentPlayer = 1;
+        //Generate a random player
+        currentPlayer = randomPlayer();
+    }
+
+    /**
+     * Give a randomly 1 or 2.
+     *
+     * @return 1 or 2.
+     */
+    private int randomPlayer() {
+        return (int) ((Math.random() * 2) + 1);
     }
 
     /**
@@ -106,11 +119,13 @@ public class GameGrid {
      */
     private int deepestPiece(int column) {
         boolean found = false;
-        int y;
-        for (y = 0; y < Y_SIZE; y++) {
-            if (grid[column][y] != 0) {
-                found = true;
-                break;
+        int y = 0;
+        if (column < grid.length && column >= 0) {
+            for (y = 0; y < Y_SIZE; y++) {
+                if (grid[column][y] != 0) {
+                    found = true;
+                    break;
+                }
             }
         }
         return y - 1;
@@ -126,48 +141,54 @@ public class GameGrid {
      */
     public int checkVictory(int column, int row) {
         if (leftPieces != 0) {
-            /*check if the given hole corrisponds to the player 
-            (counts as the first piece of four to win)*/
-            if (grid[column][row] == currentPlayer) {
-                /*from there we'll search for only 3 more pieces,
-                the first has been already counted*/
-                int right = checkRight(column + 1, row);
-                if (right >= 3) {
-                    return currentPlayer;
-                }
+            //checks if the column is in the right range
+            if (column < X_SIZE && column >= 0) {
+                //checks if the row is in the right range
+                if (row < Y_SIZE && row >= 0) {
+                    /*check if the given hole corrisponds to the player 
+                    (counts as the first piece of four to win)*/
+                    if (grid[column][row] == currentPlayer) {
+                        /*from there we'll search for only 3 more pieces,
+                        the first has been already counted*/
+                        int right = checkRight(column + 1, row);
+                        if (right >= 3) {
+                            return currentPlayer;
+                        }
 
-                int left = checkLeft(column - 1, row);
-                if (right + left >= 3) {
-                    return currentPlayer;
-                }
+                        int left = checkLeft(column - 1, row);
+                        if (right + left >= 3) {
+                            return currentPlayer;
+                        }
 
-                int up = checkUp(column, row - 1);
-                if (up >= 3) {
-                    return currentPlayer;
-                }
+                        int up = checkUp(column, row - 1);
+                        if (up >= 3) {
+                            return currentPlayer;
+                        }
 
-                int down = checkDown(column, row + 1);
-                if (up + down >= 3) {
-                    return currentPlayer;
-                }
+                        int down = checkDown(column, row + 1);
+                        if (up + down >= 3) {
+                            return currentPlayer;
+                        }
 
-                int upRight = checkUpRight(column + 1, row - 1);
-                if (upRight >= 3) {
-                    return currentPlayer;
-                }
+                        int upRight = checkUpRight(column + 1, row - 1);
+                        if (upRight >= 3) {
+                            return currentPlayer;
+                        }
 
-                int downLeft = checkDownLeft(column - 1, row + 1);
-                if (downLeft + upRight >= 3) {
-                    return currentPlayer;
-                }
+                        int downLeft = checkDownLeft(column - 1, row + 1);
+                        if (downLeft + upRight >= 3) {
+                            return currentPlayer;
+                        }
 
-                int upLeft = checkUpLeft(column - 1, row - 1);
-                if (upLeft >= 3) {
-                    return currentPlayer;
-                }
-                int downRight = checkDownRight(column + 1, row + 1);
-                if (downRight + upLeft >= 3) {
-                    return currentPlayer;
+                        int upLeft = checkUpLeft(column - 1, row - 1);
+                        if (upLeft >= 3) {
+                            return currentPlayer;
+                        }
+                        int downRight = checkDownRight(column + 1, row + 1);
+                        if (downRight + upLeft >= 3) {
+                            return currentPlayer;
+                        }
+                    }
                 }
             }
             return NO_WIN;
@@ -176,9 +197,17 @@ public class GameGrid {
         }
     }
 
+    /**
+     * Check how many consecutive tiles of the current player are right of the
+     * given point in the grid.
+     *
+     * @param column the column of the given point.
+     * @param row the row of the given point
+     * @return the number of the consecutive tiles of the player.
+     */
     private int checkRight(int column, int row) {
         int ris = 0;
-        while (column < X_SIZE) {
+        while (column < X_SIZE && column >= 0) {
             if (currentPlayer == grid[column][row]) {
                 ris += 1;
                 column += 1;
@@ -189,9 +218,17 @@ public class GameGrid {
         return ris;
     }
 
+    /**
+     * Check how many consecutive tiles of the current player are on the left of
+     * the given point in the grid.
+     *
+     * @param column the column of the given point
+     * @param row the row of the given point
+     * @return the number of consecutive tiles of the player.
+     */
     private int checkLeft(int column, int row) {
         int ris = 0;
-        while (column >= 0) {
+        while (column >= 0 && column < X_SIZE) {
             if (currentPlayer == grid[column][row]) {
                 ris += 1;
                 column -= 1;
@@ -202,9 +239,17 @@ public class GameGrid {
         return ris;
     }
 
+    /**
+     * Check how many consecutive tiles of the current player are above the
+     * given point in the grid.
+     *
+     * @param column the column of the given point
+     * @param row the row of the given point
+     * @return the number of the consecutive tiles of the player
+     */
     private int checkUp(int column, int row) {
         int ris = 0;
-        while (row >= 0) {
+        while (row >= 0 && row < Y_SIZE) {
             if (currentPlayer == grid[column][row]) {
                 ris += 1;
                 row -= 1;
@@ -215,9 +260,17 @@ public class GameGrid {
         return ris;
     }
 
+    /**
+     * Check how many consecutive tiles of the current player are below the
+     * given point in the grid.
+     *
+     * @param column the column of the given point
+     * @param row the row of the given point.
+     * @return the number of consecutive tiles of the player
+     */
     private int checkDown(int column, int row) {
         int ris = 0;
-        while (row < Y_SIZE) {
+        while (row < Y_SIZE && row >= 0) {
             if (currentPlayer == grid[column][row]) {
                 ris += 1;
                 row += 1;
@@ -228,9 +281,17 @@ public class GameGrid {
         return ris;
     }
 
+    /**
+     * Check how many consecutive tiles of the current player are in the up-left
+     * diagonal from the given point in the grid.
+     *
+     * @param column the column of the given point
+     * @param row the row of the given point
+     * @return the number of consecutive tiles of the player
+     */
     private int checkUpLeft(int column, int row) {
         int ris = 0;
-        while (row >= 0 && column >= 0) {
+        while (row >= 0 && column >= 0 && row < Y_SIZE && column < X_SIZE) {
             if (currentPlayer == grid[column][row]) {
                 ris += 1;
                 row -= 1;
@@ -242,9 +303,17 @@ public class GameGrid {
         return ris;
     }
 
+    /**
+     * Check how many consecutive tiles of the current player are in the
+     * up-right diagonal from the given point in the grid.
+     *
+     * @param column the column of the given point
+     * @param row the row of the given point
+     * @return the number of consecutive tiles of the player
+     */
     private int checkUpRight(int column, int row) {
         int ris = 0;
-        while (row >= 0 && column < X_SIZE) {
+        while (row >= 0 && column < X_SIZE && row < Y_SIZE && column >= 0) {
             if (currentPlayer == grid[column][row]) {
                 ris += 1;
                 row -= 1;
@@ -256,9 +325,17 @@ public class GameGrid {
         return ris;
     }
 
+    /**
+     * Check how many consecutive tiles of the current player are in the
+     * down-left diagonal from the given point in the grid.
+     *
+     * @param column the column of the given point
+     * @param row the row of the given point
+     * @return the number of consecutive tiles of the player
+     */
     private int checkDownLeft(int column, int row) {
         int ris = 0;
-        while (row < Y_SIZE && column >= 0) {
+        while (row < Y_SIZE && column >= 0 && row >= 0 && column < X_SIZE) {
             if (currentPlayer == grid[column][row]) {
                 ris += 1;
                 row += 1;
@@ -270,9 +347,17 @@ public class GameGrid {
         return ris;
     }
 
+    /**
+     * Check how many consecutive tiles of the current player are in the
+     * down-right diagonal from the given point in the grid.
+     *
+     * @param column the column of the given point
+     * @param row the row of the given point
+     * @return the number of consecutive tiles of the player
+     */
     private int checkDownRight(int column, int row) {
         int ris = 0;
-        while (row < Y_SIZE && column < X_SIZE) {
+        while (row < Y_SIZE && column < X_SIZE && row >= 0 && column >= 0) {
             if (currentPlayer == grid[column][row]) {
                 ris += 1;
                 row += 1;
@@ -293,6 +378,9 @@ public class GameGrid {
         return currentPlayer;
     }
 
+    /**
+     * Change the current player.
+     */
     public void changeCurrentPlayer() {
         currentPlayer = currentPlayer == 2 ? 1 : 2;
     }
@@ -310,42 +398,86 @@ public class GameGrid {
         return copyGrid;
     }
 
-    
     //TODO:  FARE IL DEBUG DELLE LE NUOVE CASELLE VUOTE!
     /**
+     * Set a new grid. If the grid is not valid (has null elements) the grid
+     * will not be set.
      *
-     * @param grid
-     * @return
+     * @param grid the grid to be set.
+     * @return true if the grid has been set. False otherwise.
      */
     public boolean setGrid(int[][] grid) {
-        boolean ris=true;
-        int tilesTemp=X_SIZE*Y_SIZE;
-            if(grid!=null && grid.length==X_SIZE ){
-                for(int[] column:grid){              
-                    if(column==null || column.length!=Y_SIZE){
-                        ris=false;
-                        break;
-                    }else{
-                    
-                        for(int row:column){
-                            if(row!=0){
-                                tilesTemp--;
-                            }
+        boolean ris = true;
+        int tilesTemp = X_SIZE * Y_SIZE;
+        //check the integrity of the first dimension of the array
+        if (grid != null && grid.length == X_SIZE) {
+            for (int[] column : grid) {
+                //check the integrity of the second dimension of the array
+                if (column == null || column.length != Y_SIZE) {
+                    //if the grid has problems, we'll not set the grid.
+                    ris = false;
+                    break;
+                } else {
+                    //check how many tiles have been already taken.
+                    for (int row : column) {
+                        //if the tile is not empty and has a valid value
+                        if (row != 0) {
+                            tilesTemp--;
+                        } else if (row != PLAYER_1 && row != PLAYER_2 && row!= VOID) {
+                            ris = false;
+                            break;
                         }
-                    
                     }
-                
+
                 }
-            }else{
-                ris=false;
+
             }
-        
-        if(ris){
+        } else {
+            //the grid doesn't exist!
+            ris = false;
+        }
+
+        //if the grid exists change the grid.
+        if (ris) {
             this.grid = grid;
-            leftPieces=tilesTemp;
+            leftPieces = tilesTemp;
         }
         return ris;
     }
 
-    
+    //TO CHECK
+    /**
+     * Check if the grid is valid. Return true if it's valid, false otherwise.
+     * @param grid the grid to check.
+     * @return Return true if it's valid, false otherwise.
+     */
+    public static boolean checkGrid(int[][] grid) {
+        boolean ris = true;
+        //check the integrity of the first dimension of the array
+        if (grid != null && grid.length == X_SIZE) {
+            for (int[] column : grid) {
+                //check the integrity of the second dimension of the array
+                if (column == null || column.length != Y_SIZE) {
+                    //if the grid has problems, we'll not set the grid.
+                    ris = false;
+                    break;
+                } else {
+                    //check how many tiles have been already taken.
+                    for (int row : column) {
+                        //if the tile is not empty and has a valid value
+                        if (row != 0 && row != PLAYER_1 && row != PLAYER_2) {
+                            ris = false;
+                            break;
+                        }
+                    }
+
+                }
+
+            }
+        } else {
+            //the grid doesn't exist!
+            ris = false;
+        }
+        return ris;
+    }
 }

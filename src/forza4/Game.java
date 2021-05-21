@@ -5,24 +5,19 @@
  */
 package forza4;
 
-
-
-
-
 /**
  *
- * @author AdSumPro
+ * @author Paossi Davide
  */
 public class Game {
 
     /**
      * @param args the command line arguments
      */
-    public static void main(String[] args) throws InterruptedException {
-        GameManager gm=new GameManager();
+    public static void main(String[] args){
+        Starter gm = new Starter();
         gm.startGame();
 
-        
     }
-    
+
 }

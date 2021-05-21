@@ -10,69 +10,81 @@ import javax.swing.JPanel;
 
 /**
  *
- * @author AdSumPro
+ * @author Paossi Davide
  */
 public class Tile extends JPanel {
+
     /**
-     * The ratio between the circle radious and the square.    
+     * The ratio between the circle radious and the square side.
      */
-    private static final float CIRCLE_RATIO=0.9f;
+    private static final float CIRCLE_RATIO = 0.9f;
     /**
-     * 
+     * The minimum distance between the circle and the square side.
      */
-    private static final float DISTANCE_RATIO= ((1-CIRCLE_RATIO)/2);
-     /**
+    private static final float DISTANCE_RATIO = ((1 - CIRCLE_RATIO) / 2);
+    /**
      * The tile is void.
      */
-    public static final int STATUS_VOID=0;
+    public static final int STATUS_VOID = 0;
     /**
      * The tile is occuped by the Player1.
      */
-    public static final int STATUS_PLAYER1=1;
+    public static final int STATUS_PLAYER1 = 1;
     /**
      * The tile is occuped by the Player2.
      */
-    public static final int STATUS_PLAYER2=2;
+    public static final int STATUS_PLAYER2 = 2;
     /**
      * Current status.
      */
     private int status;
+
     /**
      * Create a void Tile with no name.
-    */
-    public Tile(){
+     */
+    public Tile() {
         super();
-        status=STATUS_VOID;
+        status = STATUS_VOID;
     }
-    
+
     /**
-     * Create a Tile with a specific name.
+     * Create a void Tile with a specific name. If the name is not valid, it
+     * will not be set.
+     *
      * @param name the name of the tile.
      */
-    public Tile(String name){
+    public Tile(String name) {
         super();
-        this.setName(name);
-        status=STATUS_VOID;
+        if (name != null && !name.trim().isEmpty()) {
+            this.setName(name);
+        }
+        status = STATUS_VOID;
     }
-    
+
     /**
-     * Paint the tile with the colors associated with the actual status of the tile and the configuration.
+     * Paint the tile with the colors associated with the actual status of the
+     * tile and the configuration.
+     *
      * @param g the graphics of the tile.
      */
     @Override
-    public void paintComponent(Graphics g){
+    public void paintComponent(Graphics g) {
         super.paintComponent(g);
-        drawCircle(g,getWidth(),getHeight());
+        //draw the circle
+        drawCircle(g, getWidth(), getHeight());
     }
-    
+
     /**
-     * Draw the disc hole or the player disc depending on the current status of the tile.
+     * Draw the disc hole or the player disc depending on the current status of
+     * the tile.
+     *
      * @param g the graphics of the tile.
      * @param width the width of the tile.
      * @param height the height of the tile.
      */
-    private void drawCircle(Graphics g,int width,int height){
-        switch(status){
+    private void drawCircle(Graphics g, int width, int height) {
+        //set the color depending on the status of the tile
+        switch (status) {
             case STATUS_PLAYER1:
                 g.setColor(GameScreen.getPlayer1Color());
                 break;
@@ -83,29 +95,42 @@ public class Tile extends JPanel {
             default:
                 g.setColor(GameScreen.getBackgroundColor());
         }
-        g.fillOval((int)(width*DISTANCE_RATIO),(int)(height*DISTANCE_RATIO), (int)(width*CIRCLE_RATIO),(int)(height*CIRCLE_RATIO));
+        /*
+        the first two parameters indicate the top left point of the square 
+        that circumscribes the circle. The last two are indicate the size
+        of the circle
+         */
+        g.fillOval((int) (width * DISTANCE_RATIO), (int) (height * DISTANCE_RATIO),
+                (int) (width * CIRCLE_RATIO), (int) (height * CIRCLE_RATIO));
     }
 
     /**
      * Get the actual status.
+     *
      * @return The actual status.
      */
     public int getStatus() {
         return status;
     }
+
     /**
      * Set the actual status.
+     *
      * @param status The status to set.
      */
     public void setStatus(int status) {
-        this.status = status;
+        if (status == STATUS_VOID || status == STATUS_PLAYER1
+                || status == STATUS_PLAYER2) {
+            this.status = status;
+        }
     }
-    
-    public void reset(){
-        status=STATUS_VOID;
-        
-    }
-    
-    
-}
 
+    /**
+     * Reset the tile. The status is set to void.
+     */
+    public void reset() {
+        status = STATUS_VOID;
+
+    }
+
+}
