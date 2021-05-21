@@ -8,30 +8,64 @@ package forza4;
 import java.io.Serializable;
 
 /**
+ * JavaBean needed to save the columns of a game. It helps to serialize all the
+ * information to be easily saved on a file
  *
- * @author AdSumPro
+ * @author Paossi Davide
  */
-public class SavedGameColumn implements Serializable{
-    private int[] column;
-    private int currentPlayer;
+public class SavedGameColumn implements Serializable {
 
-    public SavedGameColumn(){}
-    
+    /**
+     * A column of the game.
+     */
+    private int[] column;
+
+    /**
+     * Create a SavedGameColumn Object.
+     */
+    public SavedGameColumn() {
+    }
+
+    /**
+     * Get the column.
+     *
+     * @return the column.
+     */
     public int[] getColumn() {
         return column;
     }
 
+    /**
+     * Set the column
+     *
+     * @param column the column.
+     */
     public void setColumn(int[] column) {
-        this.column = column;
+        if (checkColumn(column)) {
+            this.column = column;
+        }
     }
 
-    public int getCurrentPlayer() {
-        return currentPlayer;
+    /**
+     * Check if the column is valid
+     *
+     * @param column the column to check
+     * @return true if the column is valid, false otherwise.
+     */
+    private boolean checkColumn(int[] column) {
+        boolean ris = true;
+        if (column == null) {
+            ris = false;
+        } else {
+            for (int v : column) {
+                if (v != GameGrid.PLAYER_1 && v != GameGrid.PLAYER_2
+                        && v != GameGrid.VOID) {
+                    ris = false;
+                    break;
+                }
+            }
+        }
+        return ris;
     }
 
-    public void setCurrentPlayer(int currentPlayer) {
-        this.currentPlayer = currentPlayer;
-    }
-    
-    
 }
