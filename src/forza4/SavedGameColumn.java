@@ -45,6 +45,23 @@ public class SavedGameColumn implements Serializable {
             this.column = column;
         }
     }
+    
+    //TO CHECK
+    /**
+     * Check if the SavedGameColumn is valid
+     *
+     * @param column the SavedGameColumn to check
+     * @return true if the SavedGameColumn is valid, false otherwise.
+     */
+    public static boolean checkColumn(SavedGameColumn column) {
+        boolean ris=true;
+        if(column==null){
+            ris=false;
+        }else{
+            ris=checkColumn(column.getColumn());
+        }
+        return ris;
+    }
 
     /**
      * Check if the column is valid
@@ -52,7 +69,7 @@ public class SavedGameColumn implements Serializable {
      * @param column the column to check
      * @return true if the column is valid, false otherwise.
      */
-    private boolean checkColumn(int[] column) {
+    public static boolean checkColumn(int[] column) {
         boolean ris = true;
         if (column == null) {
             ris = false;
