@@ -122,13 +122,16 @@ public class GameScreen extends JFrame {
         } else {
             this.player2Name = "Player 2";
         }
-        //set the title
+
         String playerName = grid.getCurrentPlayer() == 1 ? this.player1Name : this.player2Name;
+        //set the title
         if (title != null && !title.isEmpty()) {
             this.title = title;
         } else {
             this.title = "Connect 4 Game";
+            title = this.title;
         }
+
         this.setTitle(title + " - " + playerName + "'s turn");
         thisGS = this;
         //init the components
@@ -159,82 +162,111 @@ public class GameScreen extends JFrame {
      */
     private void addButtons(JPanel gamePanel) {
         if (gamePanel != null) {
-            for (int currentColumn = 0; currentColumn < X_SIZE; currentColumn++) {
-                String name = BUTTON_PREFIX + SEPARATOR + currentColumn;
-                //create a button that has an arrow instead of text.
-                JButton button = new BasicArrowButton(BasicArrowButton.SOUTH);
-                button.setName(name);
-                button.setBackground(buttonColor);
-                button.setBorder(new LineBorder(borderColor));
-                //set as action command his column number
-                button.setActionCommand(Integer.toString(currentColumn));
-                //set this action listener
-                button.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent ae) {
-                        //take the action command, that contains the column of the button.
-                        String actionCommand = ae.getActionCommand();
-                        int column;
-                        try {
-                            //try to get the value
-                            column = Integer.valueOf(actionCommand);
-                            //try to insert
-                            int row = grid.insert(column);
-                            //if it was successful
-                            if (row != -1) {
-                                //takes all the components
-                                Component[] components = gamePanel.getComponents();
-                                //set the status  of the right component
-                                insert(components, row, column);
+            //TO CHECK
+            ActionListener buttonListener = new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent ae) {
+                    //take the action command, that contains the column of the button.
+                    String actionCommand = ae.getActionCommand();
+                    int column;
+                    try {
+                        //try to get the value
+                        column = Integer.valueOf(actionCommand);
+                        //try to insert
+                        int row = grid.insert(column);
+                        //if it was successful
+                        if (row != -1) {
+                            //takes all the components
+                            Component[] components = gamePanel.getComponents();
+                            //set the status  of the right component
+                            insert(components, row, column);
 
-                                //check the victory
-                                int ris = grid.checkVictory(column, row);
-                                //if something happens that isn't victory
-                                if (ris != 3) {
-                                    //The game has endend, starting to prepare the end game message.
-                                    String msg;
-                                    if (ris == 0) {
-                                        msg = "TIE! No one won!";
-                                    } else {
-                                        String winner= ris==GameGrid.PLAYER_1?player1Name:player2Name;
-                                        msg = winner + " won!";
-                                    }
-                                    //saving the choise of the user
-                                    int choise = JOptionPane.showConfirmDialog(thisGS, msg + "\n" + "Want to start a new game?",
-                                            "Game ended", JOptionPane.YES_NO_OPTION);
-                                    //YES:0   NO:1
-                                    if (choise == 0) {
-                                        //reset all the components and the logic.
-                                        reset(components, true);
-                                    } else {
-                                        thisGS.dispose();
-                                    }
+                            //check the victory
+                            int ris = grid.checkVictory(column, row);
+                            // TO CHECK EVERYTHING IN TO THE IF
+                            //if something happens that isn't victory
+                            if (ris != GameGrid.NO_WIN) {
+                                //The game has endend, starting to prepare the end game message.
+                                String msg;
+                                if (ris == GameGrid.TIE) {
+                                    msg = "TIE! No one won!";
+                                } else {
+                                    String winner = ris == GameGrid.PLAYER_1_WIN ? player1Name : player2Name;
+                                    msg = winner + " won!";
                                 }
-                                //change the player
-                                grid.changeCurrentPlayer();
-                                //get the actual player name
-                                String playerName = grid.getCurrentPlayer() == 1 ? player1Name : player2Name;
-                                //set the title
-                                thisGS.setTitle(title + " - " + playerName + "'s turn");
+                                //saving the choise of the user
+                                int choise = JOptionPane.showConfirmDialog(thisGS, msg + "\n" + "Want to start a new game?",
+                                        "Game ended", JOptionPane.YES_NO_OPTION);
+                                //YES:0   NO:1
+                                if (choise == 0) {
+                                    //reset all the components and the logic.
+                                    reset(components, true);
+                                } else {
+                                    thisGS.dispose();
+                                }
                             }
-                            //repaint to show the changings
-                            repaint();
-                        } catch (NumberFormatException nfe) {
-                            //it'll land here because for some reason the value of the button isn't a number.
-                            JOptionPane.showMessageDialog(thisGS, "An error occured", "Invalid buttom value", JOptionPane.ERROR_MESSAGE);
-                            thisGS.dispose();
+                            //change the player
+                            grid.changeCurrentPlayer();
+                            //TO CHECK
+                            //get the actual player name
+                            String playerName = grid.getCurrentPlayer() == GameGrid.PLAYER_1 ? player1Name : player2Name;
+                            //set the title
+                            thisGS.setTitle(title + " - " + playerName + "'s turn");
+                        } else {
+                            //impossibile to insert
+                            JOptionPane.showMessageDialog(thisGS, "Invalid Column", "An error occured", JOptionPane.ERROR_MESSAGE);
                         }
-
+                        //repaint to show the changings
+                        repaint();
+                    } catch (NumberFormatException nfe) {
+                        //it'll land here because for some reason the value of the button isn't a number.
+                        JOptionPane.showMessageDialog(thisGS, "Invalid buttom value", "An error occured", JOptionPane.ERROR_MESSAGE);
+                        thisGS.dispose();
                     }
-                });
-                //add the button to the gamePanel.
-                gamePanel.add(button);
 
+                }
+            };
+            for (int currentColumn = 0; currentColumn < X_SIZE; currentColumn++) {
+                //TO CHECK
+                //create the button.
+                JButton button = createButton(currentColumn, buttonListener);
+                //add the button to the gamePanel.
+                if (button != null) {
+                    gamePanel.add(button);
+                } else {
+                    JOptionPane.showMessageDialog(this, "An error occured", "Can't create the buttons", JOptionPane.ERROR_MESSAGE);
+                    this.dispose();
+                }
             }
         } else {
             JOptionPane.showMessageDialog(this, "An error occured", "Button Inizializzation Error", JOptionPane.ERROR_MESSAGE);
             this.dispose();
         }
+    }
+
+    //TO CHECK
+    /**
+     * Create a button.
+     *
+     * @param currentColumn the column.
+     * @param bL the listener
+     * @return
+     */
+    private JButton createButton(int currentColumn, ActionListener bL) {
+        JButton button = null;
+        if (currentColumn >= 0 && currentColumn < X_SIZE) {
+            String name = BUTTON_PREFIX + SEPARATOR + currentColumn;
+            //create a button that has an arrow instead of text.
+            button = new BasicArrowButton(BasicArrowButton.SOUTH);
+            button.setName(name);
+            button.setBackground(buttonColor);
+            button.setBorder(new LineBorder(borderColor));
+            //set as action command his column number
+            button.setActionCommand(Integer.toString(currentColumn));
+            //set his action listener
+            button.addActionListener(bL);
+        }
+        return button;
     }
 
     /**
@@ -373,6 +405,7 @@ public class GameScreen extends JFrame {
         }
     }
 
+    //TO CHECK
     /**
      * Reset the status of all components. If gridReset is true resets the logic
      * grid too.
@@ -383,25 +416,45 @@ public class GameScreen extends JFrame {
     private void reset(Component[] components, boolean gridReset) {
         if (components != null) {
             //reset the logic grid
-            if (gridReset) {
-                grid.reset();
-            }
+            gridReset(gridReset);
             //search all the tiles and reset them (GUI RESET)
-            for (Component c : components) {
-                String cName = c.getName();
-
-                if (cName.startsWith(TILE_PREFIX)) {
-                    //if c is a tile
-                    if (c instanceof Tile) {
-                        Tile tile = (Tile) c;
-                        tile.reset();
-                    }
-                }
-
-            }
+            tilesReset(components);
         } else {
             JOptionPane.showMessageDialog(this, "Reset Error", "An error occured", JOptionPane.ERROR_MESSAGE);
             this.dispose();
+        }
+    }
+
+    //TO CHECK
+    /**
+     * Reset the logic grid if the parameter is true.
+     *
+     * @param gridReset the reset selector.
+     */
+    private void gridReset(boolean gridReset) {
+        if (gridReset) {
+            grid.reset();
+        }
+    }
+
+    //TO CHECK
+    /**
+     * Resets all the tiles.
+     *
+     * @param components the components of the frame that contains the tiles.
+     */
+    private void tilesReset(Component[] components) {
+        for (Component c : components) {
+            String cName = c.getName();
+
+            if (cName.startsWith(TILE_PREFIX)) {
+                //if c is a tile
+                if (c instanceof Tile) {
+                    Tile tile = (Tile) c;
+                    tile.reset();
+                }
+            }
+
         }
     }
 
@@ -456,52 +509,9 @@ public class GameScreen extends JFrame {
                             gameName = JOptionPane.showInputDialog(thisGS, "Choose the name of the game:", "NewGame1");
                             //try to load the game
                             SavedGame sg = FileManager.load(gameName);
+                            //TO CHECK
                             //if the game has been loaded
-                            if (sg != null) {
-                                //try to get the grid
-                                int[][] saveGrid = sg.getGrid();
-                                //check the integrity
-                                if (GameGrid.checkGrid(saveGrid)) {
-                                    //all ok, save it
-                                    grid.setGrid(saveGrid);
-                                    //reset all the gui and logic
-                                    reset(gamePanel.getComponents(), false);
-                                    //check the status of the gui
-                                    checkStatus();
-                                    //try to get the names or set default ones.
-                                    String player1Name = sg.getPlayer1Name();
-                                    String player2Name = sg.getPlayer2Name();
-                                    String gameTitle = sg.getGameTitle();
-                                    if (gameTitle != null && !gameTitle.isEmpty()) {
-                                        thisGS.title = gameTitle;
-                                    } else {
-                                        thisGS.title = "Connect 4 Game";
-                                    }
-                                    if (player1Name != null && !player1Name.isEmpty()) {
-                                        thisGS.player1Name = player1Name;
-                                    } else {
-                                        thisGS.player1Name = "Player 1";
-                                    }
-                                    if (player2Name != null && !player2Name.isEmpty()) {
-                                        thisGS.player2Name = player2Name;
-                                    } else {
-                                        thisGS.player2Name = "Player 2";
-                                    }
-                                    //check if they are the same or change it
-                                    if(grid.getCurrentPlayer()!= sg.getCurrentPlayer()){
-                                        grid.changeCurrentPlayer();
-                                    }
-                                    //get the current player name
-                                    String currentPlayer = sg.getCurrentPlayer() == 1 ? thisGS.player1Name : thisGS.player2Name;
-                                    //set the title
-                                    thisGS.setTitle(title + " - " + currentPlayer + "'s turn");
-                                    repaint();
-                                } else {
-                                    JOptionPane.showMessageDialog(thisGS, "Corrupted game", "Impossible to load the game", JOptionPane.ERROR_MESSAGE);
-                                }
-                            } else {
-                                JOptionPane.showMessageDialog(thisGS, "Game corrupted or not found", "Impossible to load the game", JOptionPane.ERROR_MESSAGE);
-                            }
+                            loadGame(sg);
                             break;
                         case "exit":
                             //close the window.
@@ -545,6 +555,60 @@ public class GameScreen extends JFrame {
         mb.add(optionMenu);
         //add the menu bar to the GameScreen.
         this.setJMenuBar(mb);
+    }
+
+    //TO CHECK
+    /**
+     * Load a game saved in a given SavedGame
+     *
+     * @param sg the saved game
+     */
+    private void loadGame(SavedGame sg) {
+        if (sg != null) {
+            //try to get the grid
+            int[][] saveGrid = sg.getGrid();
+            //check the integrity
+            if (GameGrid.checkGrid(saveGrid)) {
+                //all ok, save it
+                grid.setGrid(saveGrid);
+                //reset all the gui and logic
+                reset(gamePanel.getComponents(), false);
+                //check the status of the gui
+                checkStatus();
+                //try to get the names or set default ones.
+                String player1Name = sg.getPlayer1Name();
+                String player2Name = sg.getPlayer2Name();
+                String gameTitle = sg.getGameTitle();
+                if (gameTitle != null && !gameTitle.isEmpty()) {
+                    thisGS.title = gameTitle;
+                } else {
+                    thisGS.title = "Connect 4 Game";
+                }
+                if (player1Name != null && !player1Name.isEmpty()) {
+                    thisGS.player1Name = player1Name;
+                } else {
+                    thisGS.player1Name = "Player 1";
+                }
+                if (player2Name != null && !player2Name.isEmpty()) {
+                    thisGS.player2Name = player2Name;
+                } else {
+                    thisGS.player2Name = "Player 2";
+                }
+                //check if they are the same or change it
+                if (grid.getCurrentPlayer() != sg.getCurrentPlayer()) {
+                    grid.changeCurrentPlayer();
+                }
+                //get the current player name
+                String currentPlayer = sg.getCurrentPlayer() == 1 ? thisGS.player1Name : thisGS.player2Name;
+                //set the title
+                thisGS.setTitle(title + " - " + currentPlayer + "'s turn");
+                repaint();
+            } else {
+                JOptionPane.showMessageDialog(thisGS, "Corrupted game", "Impossible to load the game", JOptionPane.ERROR_MESSAGE);
+            }
+        } else {
+            JOptionPane.showMessageDialog(thisGS, "Game corrupted or not found", "Impossible to load the game", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     /**
@@ -594,8 +658,9 @@ public class GameScreen extends JFrame {
      */
     private void insert(Component[] components, int row, int column) {
         if (components != null) {
-            if (row < 0 || column < 0 || row <= GameGrid.Y_SIZE
-                    || column <= GameGrid.X_SIZE) {
+            //TO CHECK (CAMBIATO || in &&)
+            if (row >= 0 && column >= 0 && row < GameGrid.Y_SIZE
+                    && column < GameGrid.X_SIZE) {
                 for (Component c : components) {
                     String cName = c.getName();
                     if (cName != null) {
@@ -616,7 +681,7 @@ public class GameScreen extends JFrame {
                                         //if the column corrisponds too
                                         if (column == columnInt) {
                                             //check if c is a tile
-                                            if(c instanceof Tile){
+                                            if (c instanceof Tile) {
                                                 Tile tile = (Tile) c;
                                                 //set the tile status
                                                 tile.setStatus(grid.getCurrentPlayer());
@@ -626,7 +691,7 @@ public class GameScreen extends JFrame {
                                             }
                                         }
                                     }
-                                }catch(NumberFormatException nfe){
+                                } catch (NumberFormatException nfe) {
                                     JOptionPane.showMessageDialog(this, "Tile Number Format Error", "An error occured", JOptionPane.ERROR_MESSAGE);
                                     this.dispose();
                                 }

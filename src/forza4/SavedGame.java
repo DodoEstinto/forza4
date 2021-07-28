@@ -8,7 +8,7 @@ package forza4;
 import java.io.Serializable;
 
 /**
- * JavaBean needed to save the Connect 4 game. It permits to serialize all the
+ * Class needed to save the Connect 4 game. It permits to serialize all the
  * information to be easily saved on a file
  *
  * @author Paossi Davide
@@ -37,6 +37,14 @@ public class SavedGame implements Serializable {
     private String gameTitle;
 
     /**
+     * Create a SavedGame object.
+     */
+    public SavedGame() {
+    }
+
+    
+    //TO CHECK
+    /**
      * Returns the grid, if the grid has problems returns null.
      *
      * @return the grid, if the grid has problems returns null.
@@ -46,7 +54,7 @@ public class SavedGame implements Serializable {
         if (columns != null) {
             grid = new int[columns.length][];
             for (int i = 0; i < columns.length; i++) {
-                if (columns[i] != null) {
+                if (SavedGameColumn.checkColumn(columns[i])) {
                     grid[i] = columns[i].getColumn();
                 } else {
                     grid = null;//grid is not valid
@@ -92,12 +100,6 @@ public class SavedGame implements Serializable {
                 || currentPlayer == GameGrid.PLAYER_2) {
             this.currentPlayer = currentPlayer;
         }
-    }
-
-    /**
-     * Create a SavedGame object.
-     */
-    public SavedGame() {
     }
 
     /**
@@ -158,6 +160,32 @@ public class SavedGame implements Serializable {
         if (gameTitle != null && !gameTitle.trim().isEmpty()) {
             this.gameTitle = gameTitle;
         }
+    }
+
+    /**
+     * Check the integrity of the SavedGame Object.
+     *
+     * @return false if the SavedGame object is invalid, true otherwise.
+     */
+    public boolean checkIntegrity() {
+        if (this.columns != null) {
+            for (SavedGameColumn c : columns) {
+                if (SavedGameColumn.checkColumn(c)) {
+                        return false;            
+                }
+            }
+            if (currentPlayer == GameGrid.PLAYER_1
+                    || currentPlayer == GameGrid.PLAYER_2) {
+                if (gameTitle != null && !gameTitle.trim().isEmpty()) {
+                    if (player1Name != null && !player1Name.trim().isEmpty()) {
+                        if (player2Name != null && !player2Name.trim().isEmpty()) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
     }
 
 }

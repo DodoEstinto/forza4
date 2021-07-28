@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package forza4;
 
 import java.io.File;
@@ -11,9 +6,6 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.swing.JOptionPane;
 
 /**
  * This class make possible to save and load connect four games.
@@ -32,7 +24,8 @@ public class FileManager {
     public static final String EXTENTION = ".f4";
 
     /**
-     * Save the status of the actual game into a file.
+     * Save the status of the actual game into a file. If the player are
+     * invalid, they will be set to standard values.
      *
      * @param grid the logic grid of the game.
      * @param player the current player
@@ -43,19 +36,20 @@ public class FileManager {
      * it's not valid. 2 if there was an IOException. 3 if the grid is not
      * valid.
      */
-    protected static int save(int[][] grid, int player, String gameName, String player1Name, String player2Name) {
+    public static int save(int[][] grid, int player, String gameName,
+            String player1Name, String player2Name) {
         int ris;
         //check the grid
         if (GameGrid.checkGrid(grid)) {
-            //check the name
-            if (gameName != null || !gameName.trim().isEmpty()) {
+            //check the game name
+            if (gameName != null && !gameName.trim().isEmpty()) {
                 //check player1Name
                 if (player1Name == null || player1Name.trim().isEmpty()) {
                     player1Name = "Player1";
                 }
                 //check player2Name
                 if (player2Name == null || player2Name.trim().isEmpty()) {
-                    player1Name = "Player1";
+                    player2Name = "Player2";
                 }
                 //create a new file object.
                 File f = new File(PATH + gameName + EXTENTION);
@@ -67,21 +61,14 @@ public class FileManager {
                         //Open a stream to write the data.
                         try (FileOutputStream out = new FileOutputStream(f)) {
                             //prepare a SavedGame object.
-                            SavedGame sg = new SavedGame();
-                            sg.setGrid(grid);
-                            sg.setCurrentPlayer(player);
-                            sg.setPlayer1Name(player1Name);
-                            sg.setPlayer2Name(player2Name);
+                            SavedGame sg = createSavedGame(grid, player, player1Name, player2Name, gameName);
 
                             try (ObjectOutputStream objOut = new ObjectOutputStream(out)) {
                                 //saves the object in the file.
                                 objOut.writeObject(sg);
                             }
                             ris = 1;
-                        } catch (IOException ex) {
-                            ris = 2;
                         }
-
                     } catch (IOException ex) {
                         ris = 2;
                     }
@@ -98,15 +85,36 @@ public class FileManager {
     }
 
     /**
+     * Create a SavedGame Object based on the given parameters.
+     *
+     * @param grid the logic grid.
+     * @param player the actual player.
+     * @param player1Name the name of player 1.
+     * @param player2Name the name of player 2.
+     * @param gameTitle the name of the game.
+     * @return the SavedGame object.
+     */
+    private static SavedGame createSavedGame(int[][] grid, int player,
+            String player1Name, String player2Name, String gameTitle) {
+        SavedGame sg = new SavedGame();
+        sg.setGrid(grid);
+        sg.setCurrentPlayer(player);
+        sg.setPlayer1Name(player1Name);
+        sg.setPlayer2Name(player2Name);
+        sg.setGameTitle(gameTitle);
+        return sg;
+    }
+
+    /**
      * Load a SavedGame object from a file name.
      *
      * @param name the name of the file to load.
      * @return the SavedGame Object saved in the file. Returns null if something
      * goes wrong.
      */
-    protected static SavedGame load(String name) {
+    public static SavedGame load(String name) {
         SavedGame ris = null;
-        if(name!=null && !name.trim().isEmpty()){
+        if (name != null && !name.trim().isEmpty()) {
             //create a new file object.
             File f = new File(PATH + name + EXTENTION);
             //Checks if it already exists.
@@ -125,93 +133,22 @@ public class FileManager {
                             if (obj instanceof SavedGame) {
                                 //all fine, save it.
                                 ris = (SavedGame) obj;
+                                if (!ris.checkIntegrity()) {
+                                    throw new Exception(); //Corrupted save!
+                                }
                             }
                         }
 
-                    } catch (IOException | NullPointerException | ClassNotFoundException ex) {
-                        JOptionPane.showMessageDialog(null, "Corrupted save!", "ERROR", JOptionPane.ERROR_MESSAGE);
+                    } catch (Exception ex) {
+                        ris = null; //set the save as corrupted.
+                        //JOptionPane.showMessageDialog(null, "Corrupted save!", "ERROR", JOptionPane.ERROR_MESSAGE);
                     }
                 }
-            }
+            } //else {
+            //JOptionPane.showMessageDialog(null,"Save not found", "ERROR",JOptionPane.ERROR_MESSAGE);
+            //}
         }
         return ris;
     }
 
-    /**
-     * Second implementation of save function. It was quite good, but needed too
-     * much controls and effords on the load.
-     *
-     *
-     * 0=Nome gia usato. 1=Salvataggio con successo. 2=Salvataggio fallito.
-     * 3=Griglia non valida.
-     *
-     * @deprecated
-     * @param grid
-     * @param name
-     * @param player
-     * @return
-     */
-    /*
-    protected static int saveGridObject(int[][] grid,String name,int player){
-        int ris;
-        File f=new File(PATH+name+".f4");
-        if(!f.exists()){
-            try {
-                f.createNewFile();
-                FileOutputStream out = new FileOutputStream(f);
-                OldSavedGame sg=new OldSavedGame(grid,player);
-                ObjectOutputStream objOut=new ObjectOutputStream(out);
-                objOut.writeObject(sg);
-                out.close();
-                ris=1;
-            } catch (IOException ex) {
-                ris=2;
-            } catch (NullPointerException ex){
-                ris=3;
-            }
-        }else{
-            ris=0;
-        }
-        return ris;
-    }
-     */
-    /**
-     *
-     * First implementation of save function. It was primitive and problematics.
-     * Use save instead.
-     *
-     * @deprecated
-     * @param grid
-     * @param name
-     * @param player
-     * @return
-     */
-    /*
-    private static int oldSaveTxt(int[][] grid,String name,int player){
-        int ris;
-        File f=new File(PATH+name+".f4");
-        if(!f.exists()){
-            try {
-                f.createNewFile();
-                PrintWriter out = new PrintWriter(f);
-                out.print(""+player+";");
-                for(int column=0;column<grid.length;column++){                    
-                    for(int row=0;row<grid[column].length;row++){
-                     out.print(""+grid[column][row]+";");
-                    }                                             
-                }
-                ris=1;
-                out.close();
-                ris=1;
-            } catch (IOException ex) {
-                ris=2;
-            } catch (NullPointerException ex){
-                ris=3;
-            }
-        }else{
-            ris=0;
-        }
-        return ris;
-    }
-     */
 }

@@ -111,23 +111,23 @@ public class GameGrid {
     }
 
     /**
-     * Finds the deepest empty hole where the piece can be insterd.
+     * Finds the deepest empty hole where the piece can be inserted.
      *
      * @param column The column to check
      * @return the height of the hole where the piece would stop. If there is no
      * room returns -1.
      */
     private int deepestPiece(int column) {
-        boolean found = false;
         int y = 0;
         if (column < grid.length && column >= 0) {
             for (y = 0; y < Y_SIZE; y++) {
+                //check for a collision.
                 if (grid[column][y] != 0) {
-                    found = true;
                     break;
                 }
             }
         }
+        //return the last hole or the hole before the collision.
         return y - 1;
         //return found ? y-1 : y;
     }
@@ -140,61 +140,65 @@ public class GameGrid {
      * @return the status of the game (win,tie,no win).
      */
     public int checkVictory(int column, int row) {
-        if (leftPieces != 0) {
-            //checks if the column is in the right range
-            if (column < X_SIZE && column >= 0) {
-                //checks if the row is in the right range
-                if (row < Y_SIZE && row >= 0) {
-                    /*check if the given hole corrisponds to the player 
+
+        //checks if the column is in the right range
+        if (column < X_SIZE && column >= 0) {
+            //checks if the row is in the right range
+            if (row < Y_SIZE && row >= 0) {
+                /*check if the given hole corrisponds to the player 
                     (counts as the first piece of four to win)*/
-                    if (grid[column][row] == currentPlayer) {
-                        /*from there we'll search for only 3 more pieces,
+                if (grid[column][row] == currentPlayer) {
+                    /*from there we'll search for only 3 more pieces,
                         the first has been already counted*/
-                        int right = checkRight(column + 1, row);
-                        if (right >= 3) {
-                            return currentPlayer;
-                        }
+                    int right = checkRight(column + 1, row);
+                    if (right >= 3) {
+                        return currentPlayer;
+                    }
 
-                        int left = checkLeft(column - 1, row);
-                        if (right + left >= 3) {
-                            return currentPlayer;
-                        }
+                    int left = checkLeft(column - 1, row);
+                    if (right + left >= 3) {
+                        return currentPlayer;
+                    }
 
-                        int up = checkUp(column, row - 1);
-                        if (up >= 3) {
-                            return currentPlayer;
-                        }
+                    int up = checkUp(column, row - 1);
+                    if (up >= 3) {
+                        return currentPlayer;
+                    }
 
-                        int down = checkDown(column, row + 1);
-                        if (up + down >= 3) {
-                            return currentPlayer;
-                        }
+                    int down = checkDown(column, row + 1);
+                    if (up + down >= 3) {
+                        return currentPlayer;
+                    }
 
-                        int upRight = checkUpRight(column + 1, row - 1);
-                        if (upRight >= 3) {
-                            return currentPlayer;
-                        }
+                    int upRight = checkUpRight(column + 1, row - 1);
+                    if (upRight >= 3) {
+                        return currentPlayer;
+                    }
 
-                        int downLeft = checkDownLeft(column - 1, row + 1);
-                        if (downLeft + upRight >= 3) {
-                            return currentPlayer;
-                        }
+                    int downLeft = checkDownLeft(column - 1, row + 1);
+                    if (downLeft + upRight >= 3) {
+                        return currentPlayer;
+                    }
 
-                        int upLeft = checkUpLeft(column - 1, row - 1);
-                        if (upLeft >= 3) {
-                            return currentPlayer;
-                        }
-                        int downRight = checkDownRight(column + 1, row + 1);
-                        if (downRight + upLeft >= 3) {
-                            return currentPlayer;
-                        }
+                    int upLeft = checkUpLeft(column - 1, row - 1);
+                    if (upLeft >= 3) {
+                        return currentPlayer;
+                    }
+                    int downRight = checkDownRight(column + 1, row + 1);
+                    if (downRight + upLeft >= 3) {
+                        return currentPlayer;
                     }
                 }
+                
+                //CHECK THE TIE
+                //if no one won check for a tie
+                if (leftPieces == 0) {
+                    return TIE;
+                }
             }
-            return NO_WIN;
-        } else {
-            return TIE;
         }
+        return NO_WIN;
+
     }
 
     /**
@@ -390,7 +394,15 @@ public class GameGrid {
      *
      * @return the COPY of the grid.
      */
-    public int[][] getGrid() {
+    public int[][] getGrid() {        
+        return copyGrid();
+    }
+    
+    /**
+     * Generate a copy of the grid.
+     * @return the copy of the grid.
+     */
+    private int[][] copyGrid(){
         int[][] copyGrid = new int[X_SIZE][];
         for (int i = 0; i < X_SIZE; i++) {
             copyGrid[i] = Arrays.copyOf(grid[i], grid[i].length);
@@ -398,9 +410,8 @@ public class GameGrid {
         return copyGrid;
     }
 
-    //TODO:  FARE IL DEBUG DELLE LE NUOVE CASELLE VUOTE!
     /**
-     * Set a new grid. If the grid is not valid (has null elements) the grid
+     * Set a new grid. If the grid is not valid (invalid values) the grid
      * will not be set.
      *
      * @param grid the grid to be set.
@@ -420,12 +431,14 @@ public class GameGrid {
                 } else {
                     //check how many tiles have been already taken.
                     for (int row : column) {
+                        
+                        //TO CHECK
                         //if the tile is not empty and has a valid value
-                        if (row != 0) {
-                            tilesTemp--;
-                        } else if (row != PLAYER_1 && row != PLAYER_2 && row!= VOID) {
+                        if (row != PLAYER_1 && row != PLAYER_2 && row != VOID) {
                             ris = false;
                             break;
+                        }else if (row != VOID) {
+                            tilesTemp--;
                         }
                     }
 
@@ -433,11 +446,11 @@ public class GameGrid {
 
             }
         } else {
-            //the grid doesn't exist!
+            //grid invalid!
             ris = false;
         }
 
-        //if the grid exists change the grid.
+        //if the grid is valid change the grid.
         if (ris) {
             this.grid = grid;
             leftPieces = tilesTemp;
@@ -445,9 +458,9 @@ public class GameGrid {
         return ris;
     }
 
-    //TO CHECK
     /**
      * Check if the grid is valid. Return true if it's valid, false otherwise.
+     *
      * @param grid the grid to check.
      * @return Return true if it's valid, false otherwise.
      */
@@ -458,14 +471,14 @@ public class GameGrid {
             for (int[] column : grid) {
                 //check the integrity of the second dimension of the array
                 if (column == null || column.length != Y_SIZE) {
-                    //if the grid has problems, we'll not set the grid.
+                    //if the grid has problems
                     ris = false;
                     break;
                 } else {
-                    //check how many tiles have been already taken.
+                    //check the rows of the column
                     for (int row : column) {
-                        //if the tile is not empty and has a valid value
-                        if (row != 0 && row != PLAYER_1 && row != PLAYER_2) {
+                        //if the tile has invalid values
+                        if (row != VOID && row != PLAYER_1 && row != PLAYER_2) {
                             ris = false;
                             break;
                         }
@@ -475,7 +488,7 @@ public class GameGrid {
 
             }
         } else {
-            //the grid doesn't exist!
+            //the grid is invalid!
             ris = false;
         }
         return ris;
