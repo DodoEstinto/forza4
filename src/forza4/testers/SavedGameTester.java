@@ -8,7 +8,7 @@ package forza4.testers;
 import forza4.SavedGame;
 
 /**
- *
+ * Tests the SavedGame class.
  * @author Davide Paossi
  */
 public class SavedGameTester {
@@ -20,7 +20,7 @@ public class SavedGameTester {
             {0,0,0,0,0,0},{0,0,0,0,0,0},{0,0,0,0,0,0},{0,0,0,0,0,0}};
         sg.setGrid(tempGrid);
         
-        System.out.println("Trying the grid set and get: ");
+        System.out.println("Trying the grid set: ");
         System.out.println( "Expected:\n"+
                             "[0,0,0,0,0,0]\n" +
                             "[0,0,0,0,0,0]\n" +
