@@ -9,7 +9,7 @@ import forza4.GameGrid;
 import java.util.ArrayList;
 
 /**
- *
+ *Tests the GameGrid class.
  * @author Davide Paossi
  */
 public class GameGridTester {

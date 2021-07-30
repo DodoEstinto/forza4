@@ -3,12 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package forza4.testers;
+package forza4;
 
 /**
- * Tests the GameScreen class.
- * @author Davide Paossi
+ *
+ * @author AdSumPro
  */
-public class GameScreenTester {
+public interface GridColor {
     
 }

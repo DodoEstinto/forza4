@@ -5,7 +5,9 @@
  */
 package forza4;
 
+import forza4.testers.FileManagerTester;
 import forza4.testers.GameGridTester;
+import forza4.testers.SavedGameColumnTester;
 import forza4.testers.SavedGameTester;
 import forza4.testers.TileTester;
 import javax.swing.JOptionPane;
@@ -18,10 +20,12 @@ public class Starter {
  
     
     public static void main(String[] args){
-      Starter.startGame();
-      //  GameGridTester.test();
+      //Starter.startGame();
+      //GameGridTester.test();
       //TileTester.test();
+      SavedGameColumnTester.test();
       //SavedGameTester.test();
+      //FileManagerTester.test();
     }
     
     public static void startGame(){

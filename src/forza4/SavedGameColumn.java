@@ -6,6 +6,7 @@
 package forza4;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 /**
  * JavaBean needed to save the columns of a game. It helps to serialize all the
@@ -83,6 +84,11 @@ public class SavedGameColumn implements Serializable {
             }
         }
         return ris;
+    }
+    
+    @Override
+    public String toString(){
+        return Arrays.toString(column);
     }
 
 }

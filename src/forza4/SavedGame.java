@@ -170,7 +170,7 @@ public class SavedGame implements Serializable {
     public boolean checkIntegrity() {
         if (this.columns != null) {
             for (SavedGameColumn c : columns) {
-                if (SavedGameColumn.checkColumn(c)) {
+                if (!SavedGameColumn.checkColumn(c)) {
                         return false;            
                 }
             }
