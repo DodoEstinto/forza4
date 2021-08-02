@@ -20,10 +20,12 @@ public class Starter {
  
     
     public static void main(String[] args){
-      //Starter.startGame();
+      Starter.startGame();
+      //Options o=new Options(new GameScreen("aa","bb","cc"));
+      //o.setVisible(true);
       //GameGridTester.test();
       //TileTester.test();
-      SavedGameColumnTester.test();
+      //SavedGameColumnTester.test();
       //SavedGameTester.test();
       //FileManagerTester.test();
     }

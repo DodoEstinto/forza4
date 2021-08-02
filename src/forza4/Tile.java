@@ -5,6 +5,7 @@
  */
 package forza4;
 
+import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.JPanel;
 
@@ -38,25 +39,28 @@ public class Tile extends JPanel {
      * Current status.
      */
     private int status;
-
     /**
-     * Create a void Tile with no name.
+     * The colors of the GameScreen
      */
-    public Tile() {
-        super();
-        status = STATUS_VOID;
-    }
+    private ScreenColors sc;
 
     /**
-     * Create a void Tile with a specific name. If the name is not valid, it
-     * will not be set.
+     * Create a void Tile with a specific name and a specific screen. If the
+     * name is not valid, it will not be set. If sc is not valid, default colors
+     * will be used.
      *
      * @param name the name of the tile.
+     * @param sc the screen connected.
      */
-    public Tile(String name) {
+    public Tile(String name, ScreenColors sc) {
         super();
         if (name != null && !name.trim().isEmpty()) {
             this.setName(name);
+        }
+        if (sc == null) {
+            setColors();
+        } else {
+            this.sc = sc;
         }
         status = STATUS_VOID;
     }
@@ -75,6 +79,38 @@ public class Tile extends JPanel {
     }
 
     /**
+     * Create and set the ScreenColors with default colors.
+     */
+    private void setColors() {
+        sc = new ScreenColors() {
+            @Override
+            public Color getBackgroundColor() {
+                return Color.WHITE;
+            }
+
+            @Override
+            public Color getBorderColor() {
+                return Color.BLACK;
+            }
+
+            @Override
+            public Color getPlayer1Color() {
+                return Color.RED;
+            }
+
+            @Override
+            public Color getPlayer2Color() {
+                return Color.BLUE;
+            }
+
+            @Override
+            public Color getGridColor() {
+                return Color.DARK_GRAY;
+            }
+        };
+    }
+
+    /**
      * Draw the disc hole or the player disc depending on the current status of
      * the tile.
      *
@@ -86,14 +122,14 @@ public class Tile extends JPanel {
         //set the color depending on the status of the tile
         switch (status) {
             case STATUS_PLAYER1:
-                g.setColor(GameScreen.getPlayer1Color());
+                g.setColor(sc.getPlayer1Color());
                 break;
             case STATUS_PLAYER2:
-                g.setColor(GameScreen.getPlayer2Color());
+                g.setColor(sc.getPlayer2Color());
                 break;
             case STATUS_VOID:
             default:
-                g.setColor(GameScreen.getBackgroundColor());
+                g.setColor(sc.getBackgroundColor());
         }
         /*
         the first two parameters indicate the top left point of the square 
