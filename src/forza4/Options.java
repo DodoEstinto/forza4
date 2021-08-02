@@ -66,7 +66,7 @@ public class Options extends JFrame {
 
     private void createComboBox() {
         JComboBox<String> cb = new JComboBox<>(new String[]{"backgroundColor",
-            "player1Color", "player2Color"});
+            "gridColor","borderColor","player1Color", "player2Color"});
         cb.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -171,14 +171,14 @@ public class Options extends JFrame {
                                                         ssc.setBackgroundColor(color);
                                                         ref.repaint();
                                                         break;
-                                                    /*case "gridColor":
+                                                    case "gridColor":
                                                         ssc.setGridColor(color);
                                                         ref.repaint();
                                                         break;
                                                     case "borderColor":
                                                         ssc.setBorderColor(color);
                                                         ref.repaint();
-                                                        break;*/
+                                                        break;
                                                     case "player1Color":
                                                         ssc.setPlayer1Color(color);
                                                         ref.repaint();

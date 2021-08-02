@@ -25,7 +25,7 @@ public interface SettableScreenColors extends ScreenColors {
      *
      * @param borderColor the border color.
      */
-   // public void setBorderColor(Color borderColor);
+    public void setBorderColor(Color borderColor);
 
     /**
      * Set the player 1 color.
@@ -46,5 +46,5 @@ public interface SettableScreenColors extends ScreenColors {
      *
      * @param gridColor the grid color.
      */
-    //public void setGridColor(Color gridColor);
+    public void setGridColor(Color gridColor);
 }
