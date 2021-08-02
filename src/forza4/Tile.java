@@ -8,6 +8,7 @@ package forza4;
 import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.JPanel;
+import javax.swing.border.LineBorder;
 
 /**
  *
@@ -76,6 +77,8 @@ public class Tile extends JPanel {
         super.paintComponent(g);
         //draw the circle
         drawCircle(g, getWidth(), getHeight());
+        this.setBackground(sc.getGridColor());
+        this.setBorder(new LineBorder(sc.getBorderColor()));
     }
 
     /**
