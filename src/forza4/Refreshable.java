@@ -9,6 +9,7 @@ package forza4;
  *
  * @author AdSumPro
  */
-public interface GridColor {
+public interface Refreshable {
     
+    public void repaint();
 }

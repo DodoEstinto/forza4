@@ -5,6 +5,7 @@
  */
 package forza4.testers;
 
+import forza4.GameScreen;
 import forza4.Tile;
 
 /**
@@ -13,8 +14,8 @@ import forza4.Tile;
  */
 public class TileTester {
     public static void test(){
-        Tile t=new Tile("test");
-        System.out.println("Creating a Tile: ");
+        Tile t=new Tile("test",null);
+        System.out.println("Creating a Tile with null Screen: ");
         System.out.println("Expected: \tName:test\tStatus:0");
         System.out.println("Actual: \tName:"+t.getName()+"\tStatus:"+t.getStatus());
         System.out.println("\n\n");
@@ -37,6 +38,12 @@ public class TileTester {
         System.out.println("Resetting the tile: ");
         System.out.println("Expected:0");
         System.out.println("Actual:"+t.getStatus());
+        GameScreen gs=new GameScreen("a","b","c");
+        t=new Tile("test",gs);
+        System.out.println("Creating a Tile with generic Screen: ");
+        System.out.println("Expected: \tName:test\tStatus:0");
+        System.out.println("Actual: \tName:"+t.getName()+"\tStatus:"+t.getStatus());
+        System.out.println("\n\n");
     
     }
 }

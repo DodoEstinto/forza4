@@ -3,10 +3,12 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
+            <file>file:/C:/Users/AdSumPro/Documents/NetBeansProjects/Forza4/src/forza4/Options.java</file>
             <file>file:/C:/Users/AdSumPro/Documents/NetBeansProjects/Forza4/src/forza4/GameGrid.java</file>
             <file>file:/C:/Users/AdSumPro/Documents/NetBeansProjects/Forza4/src/forza4/testers/TileTester.java</file>
             <file>file:/C:/Users/AdSumPro/Documents/NetBeansProjects/Forza4/src/forza4/testers/GameGridTester.java</file>
             <file>file:/C:/Users/AdSumPro/Documents/NetBeansProjects/Forza4/src/forza4/Tile.java</file>
+            <file>file:/C:/Users/AdSumPro/Documents/NetBeansProjects/Forza4/src/forza4/ScreenColors.java</file>
             <file>file:/C:/Users/AdSumPro/Documents/NetBeansProjects/Forza4/src/forza4/FileManager.java</file>
             <file>file:/C:/Users/AdSumPro/Documents/NetBeansProjects/Forza4/src/forza4/SavedGame.java</file>
             <file>file:/C:/Users/AdSumPro/Documents/NetBeansProjects/Forza4/src/forza4/testers/SavedGameTester.java</file>
@@ -15,6 +17,7 @@
             <file>file:/C:/Users/AdSumPro/Documents/NetBeansProjects/Forza4/src/forza4/SavedGameColumn.java</file>
             <file>file:/C:/Users/AdSumPro/Documents/NetBeansProjects/Forza4/src/forza4/Starter.java</file>
             <file>file:/C:/Users/AdSumPro/Documents/NetBeansProjects/Forza4/src/forza4/testers/GameScreenTester.java</file>
+            <file>file:/C:/Users/AdSumPro/Documents/NetBeansProjects/Forza4/src/forza4/SettableScreenColors.java</file>
             <file>file:/C:/Users/AdSumPro/Documents/NetBeansProjects/Forza4/src/forza4/testers/FileManagerTester.java</file>
         </group>
     </open-files>

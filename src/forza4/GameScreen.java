@@ -28,7 +28,7 @@ import javax.swing.plaf.basic.BasicArrowButton;
  *
  * @author Paossi Davide
  */
-public class GameScreen extends JFrame {
+public class GameScreen extends JFrame implements SettableScreenColors,Refreshable{
 
     /**
      * The number of columns of the GUI grid.
@@ -53,27 +53,27 @@ public class GameScreen extends JFrame {
     /**
      * The color of the background.
      */
-    private static Color backgroundColor;
+    private Color backgroundColor;
     /**
      * The color of the grid.
      */
-    private static Color gridColor;
+    private Color gridColor;
     /**
      * The color of the borders.
      */
-    private static Color borderColor;
+    private Color borderColor;
     /**
      * The color of the player 1.
      */
-    private static Color player1Color;
+    private Color player1Color;
     /**
      * The color of the player 2.
      */
-    private static Color player2Color;
+    private Color player2Color;
     /**
      * The color of the buttons.
      */
-    private static Color buttonColor;
+    private Color buttonColor;
     /**
      * The name of the player1.
      */
@@ -134,6 +134,9 @@ public class GameScreen extends JFrame {
 
         this.setTitle(title + " - " + playerName + "'s turn");
         thisGS = this;
+        this.setSize(1000, 1000);
+        this.setPreferredSize(new Dimension(1000, 1000));
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //init the components
         init();
     }
@@ -142,9 +145,7 @@ public class GameScreen extends JFrame {
      * Init all the components of the GameScreen
      */
     private void init() {
-        this.setSize(1000, 1000);
-        this.setPreferredSize(new Dimension(1000, 1000));
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        
         createMenu();
         gamePanel = new JPanel(new GridLayout(Y_SIZE, X_SIZE));//create the panel that will host the gamegrid.
         setColors();
@@ -279,9 +280,9 @@ public class GameScreen extends JFrame {
             for (int currentRow = 1; currentRow < Y_SIZE; currentRow++) { //The first is occupied from the buttons
                 for (int currentColumn = 0; currentColumn < X_SIZE; currentColumn++) {
                     String name = TILE_PREFIX + SEPARATOR + (currentRow - 1) + SEPARATOR + currentColumn;
-                    Tile tile = new Tile(name);
-                    tile.setBackground(GameScreen.gridColor);
-                    tile.setBorder(new LineBorder(GameScreen.borderColor));
+                    Tile tile = new Tile(name, this);
+                    tile.setBackground(gridColor);
+                    tile.setBorder(new LineBorder(borderColor));
                     gamePanel.add(tile);
                 }
             }
@@ -310,7 +311,8 @@ public class GameScreen extends JFrame {
      *
      * @return the background color.
      */
-    public static Color getBackgroundColor() {
+    @Override
+    public Color getBackgroundColor() {
         return backgroundColor;
     }
 
@@ -319,9 +321,9 @@ public class GameScreen extends JFrame {
      *
      * @param backgroundColor the background color.
      */
-    public static void setBackgroundColor(Color backgroundColor) {
+    public void setBackgroundColor(Color backgroundColor) {
         if (backgroundColor != null) {
-            GameScreen.backgroundColor = backgroundColor;
+            this.backgroundColor = backgroundColor;
         }
     }
 
@@ -330,7 +332,8 @@ public class GameScreen extends JFrame {
      *
      * @return the border color.
      */
-    public static Color getBorderColor() {
+    @Override
+    public Color getBorderColor() {
         return borderColor;
     }
 
@@ -339,9 +342,9 @@ public class GameScreen extends JFrame {
      *
      * @param borderColor the border color.
      */
-    public static void setBorderColor(Color borderColor) {
+    public void setBorderColor(Color borderColor) {
         if (borderColor != null) {
-            GameScreen.borderColor = borderColor;
+            this.borderColor = borderColor;
         }
     }
 
@@ -350,7 +353,8 @@ public class GameScreen extends JFrame {
      *
      * @return the player 1 color.
      */
-    public static Color getPlayer1Color() {
+    @Override
+    public Color getPlayer1Color() {
         return player1Color;
     }
 
@@ -359,9 +363,9 @@ public class GameScreen extends JFrame {
      *
      * @param player1Color the player 1 color.
      */
-    public static void setPlayer1Color(Color player1Color) {
+    public void setPlayer1Color(Color player1Color) {
         if (player1Color != null) {
-            GameScreen.player1Color = player1Color;
+            this.player1Color = player1Color;
         }
     }
 
@@ -370,7 +374,8 @@ public class GameScreen extends JFrame {
      *
      * @return the player 2 color.
      */
-    public static Color getPlayer2Color() {
+    @Override
+    public Color getPlayer2Color() {
         return player2Color;
     }
 
@@ -379,9 +384,9 @@ public class GameScreen extends JFrame {
      *
      * @param player2Color the player 2 color.
      */
-    public static void setPlayer2Color(Color player2Color) {
+    public void setPlayer2Color(Color player2Color) {
         if (player2Color != null) {
-            GameScreen.player2Color = player2Color;
+            this.player2Color = player2Color;
         }
     }
 
@@ -390,7 +395,8 @@ public class GameScreen extends JFrame {
      *
      * @return the grid color.
      */
-    public static Color getGridColor() {
+    @Override
+    public Color getGridColor() {
         return gridColor;
     }
 
@@ -399,9 +405,9 @@ public class GameScreen extends JFrame {
      *
      * @param gridColor the grid color.
      */
-    public static void setGridColor(Color gridColor) {
+    public void setGridColor(Color gridColor) {
         if (gridColor != null) {
-            GameScreen.gridColor = gridColor;
+            this.gridColor = gridColor;
         }
     }
 
@@ -512,6 +518,10 @@ public class GameScreen extends JFrame {
                             //TO CHECK
                             //if the game has been loaded
                             loadGame(sg);
+                            break;
+                        case "options":
+                            Options o= new Options(thisGS,thisGS);
+                            o.setVisible(true);
                             break;
                         case "exit":
                             //close the window.
