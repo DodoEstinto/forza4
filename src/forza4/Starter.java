@@ -5,6 +5,7 @@
  */
 package forza4;
 
+import forza4.GUI.GameScreen;
 import forza4.testers.FileManagerTester;
 import forza4.testers.GameGridTester;
 import forza4.testers.SavedGameColumnTester;

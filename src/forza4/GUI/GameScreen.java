@@ -3,8 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package forza4;
+package forza4.GUI;
 
+import forza4.IO.FileManager;
+import forza4.logic.GameGrid;
+import forza4.interfaces.Refreshable;
+import forza4.IO.SavedGame;
+import forza4.interfaces.SettableScreenColors;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -28,7 +33,7 @@ import javax.swing.plaf.basic.BasicArrowButton;
  *
  * @author Paossi Davide
  */
-public class GameScreen extends JFrame implements SettableScreenColors,Refreshable{
+public class GameScreen extends JFrame implements SettableScreenColors, Refreshable {
 
     /**
      * The number of columns of the GUI grid.
@@ -136,6 +141,7 @@ public class GameScreen extends JFrame implements SettableScreenColors,Refreshab
         thisGS = this;
         this.setSize(1000, 1000);
         this.setPreferredSize(new Dimension(1000, 1000));
+        this.setResizable(false);
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         //init the components
         init();
@@ -145,7 +151,7 @@ public class GameScreen extends JFrame implements SettableScreenColors,Refreshab
      * Init all the components of the GameScreen
      */
     private void init() {
-        
+
         createMenu();
         gamePanel = new JPanel(new GridLayout(Y_SIZE, X_SIZE));//create the panel that will host the gamegrid.
         setColors();
@@ -163,7 +169,6 @@ public class GameScreen extends JFrame implements SettableScreenColors,Refreshab
      */
     private void addButtons(JPanel gamePanel) {
         if (gamePanel != null) {
-            //TO CHECK
             ActionListener buttonListener = new ActionListener() {
                 @Override
                 public void actionPerformed(ActionEvent ae) {
@@ -184,7 +189,6 @@ public class GameScreen extends JFrame implements SettableScreenColors,Refreshab
 
                             //check the victory
                             int ris = grid.checkVictory(column, row);
-                            // TO CHECK EVERYTHING IN TO THE IF
                             //if something happens that isn't victory
                             if (ris != GameGrid.NO_WIN) {
                                 //The game has endend, starting to prepare the end game message.
@@ -192,6 +196,7 @@ public class GameScreen extends JFrame implements SettableScreenColors,Refreshab
                                 if (ris == GameGrid.TIE) {
                                     msg = "TIE! No one won!";
                                 } else {
+                                    //select the winner
                                     String winner = ris == GameGrid.PLAYER_1_WIN ? player1Name : player2Name;
                                     msg = winner + " won!";
                                 }
@@ -208,7 +213,6 @@ public class GameScreen extends JFrame implements SettableScreenColors,Refreshab
                             }
                             //change the player
                             grid.changeCurrentPlayer();
-                            //TO CHECK
                             //get the actual player name
                             String playerName = grid.getCurrentPlayer() == GameGrid.PLAYER_1 ? player1Name : player2Name;
                             //set the title
@@ -228,30 +232,30 @@ public class GameScreen extends JFrame implements SettableScreenColors,Refreshab
                 }
             };
             for (int currentColumn = 0; currentColumn < X_SIZE; currentColumn++) {
-                //TO CHECK
                 //create the button.
                 JButton button = createButton(currentColumn, buttonListener);
                 //add the button to the gamePanel.
                 if (button != null) {
                     gamePanel.add(button);
                 } else {
-                    JOptionPane.showMessageDialog(this, "An error occured", "Can't create the buttons", JOptionPane.ERROR_MESSAGE);
+                    JOptionPane.showMessageDialog(this, "An error occured",
+                            "Can't create the buttons", JOptionPane.ERROR_MESSAGE);
                     this.dispose();
                 }
             }
         } else {
-            JOptionPane.showMessageDialog(this, "An error occured", "Button Inizializzation Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "An error occured",
+                    "Button Inizializzation Error", JOptionPane.ERROR_MESSAGE);
             this.dispose();
         }
     }
 
-    //TO CHECK
     /**
      * Create a button.
      *
      * @param currentColumn the column.
      * @param bL the listener
-     * @return
+     * @return the button. Returns null if the columun is invalid.
      */
     private JButton createButton(int currentColumn, ActionListener bL) {
         JButton button = null;
@@ -277,7 +281,8 @@ public class GameScreen extends JFrame implements SettableScreenColors,Refreshab
      */
     private void addTiles(JPanel gamePanel) {
         if (gamePanel != null) {
-            for (int currentRow = 1; currentRow < Y_SIZE; currentRow++) { //The first is occupied from the buttons
+            //The first row is occupied from the buttons
+            for (int currentRow = 1; currentRow < Y_SIZE; currentRow++) {
                 for (int currentColumn = 0; currentColumn < X_SIZE; currentColumn++) {
                     String name = TILE_PREFIX + SEPARATOR + (currentRow - 1) + SEPARATOR + currentColumn;
                     Tile tile = new Tile(name, this);
@@ -321,6 +326,7 @@ public class GameScreen extends JFrame implements SettableScreenColors,Refreshab
      *
      * @param backgroundColor the background color.
      */
+    @Override
     public void setBackgroundColor(Color backgroundColor) {
         if (backgroundColor != null) {
             this.backgroundColor = backgroundColor;
@@ -342,6 +348,7 @@ public class GameScreen extends JFrame implements SettableScreenColors,Refreshab
      *
      * @param borderColor the border color.
      */
+    @Override
     public void setBorderColor(Color borderColor) {
         if (borderColor != null) {
             this.borderColor = borderColor;
@@ -363,6 +370,7 @@ public class GameScreen extends JFrame implements SettableScreenColors,Refreshab
      *
      * @param player1Color the player 1 color.
      */
+    @Override
     public void setPlayer1Color(Color player1Color) {
         if (player1Color != null) {
             this.player1Color = player1Color;
@@ -384,6 +392,7 @@ public class GameScreen extends JFrame implements SettableScreenColors,Refreshab
      *
      * @param player2Color the player 2 color.
      */
+    @Override
     public void setPlayer2Color(Color player2Color) {
         if (player2Color != null) {
             this.player2Color = player2Color;
@@ -405,19 +414,19 @@ public class GameScreen extends JFrame implements SettableScreenColors,Refreshab
      *
      * @param gridColor the grid color.
      */
+    @Override
     public void setGridColor(Color gridColor) {
         if (gridColor != null) {
             this.gridColor = gridColor;
         }
     }
 
-    //TO CHECK
     /**
      * Reset the status of all components. If gridReset is true resets the logic
      * grid too.
      *
      * @param components the components to reset.
-     * @param gridReset resets the logic grid if true.
+     * @param gridReset the reset selector.
      */
     private void reset(Component[] components, boolean gridReset) {
         if (components != null) {
@@ -426,12 +435,12 @@ public class GameScreen extends JFrame implements SettableScreenColors,Refreshab
             //search all the tiles and reset them (GUI RESET)
             tilesReset(components);
         } else {
-            JOptionPane.showMessageDialog(this, "Reset Error", "An error occured", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Reset Error",
+                    "An error occured", JOptionPane.ERROR_MESSAGE);
             this.dispose();
         }
     }
 
-    //TO CHECK
     /**
      * Reset the logic grid if the parameter is true.
      *
@@ -443,24 +452,24 @@ public class GameScreen extends JFrame implements SettableScreenColors,Refreshab
         }
     }
 
-    //TO CHECK
     /**
      * Resets all the tiles.
      *
      * @param components the components of the frame that contains the tiles.
      */
     private void tilesReset(Component[] components) {
-        for (Component c : components) {
-            String cName = c.getName();
+        if (components != null) {
+            for (Component c : components) {
+                String cName = c.getName();
 
-            if (cName.startsWith(TILE_PREFIX)) {
-                //if c is a tile
-                if (c instanceof Tile) {
-                    Tile tile = (Tile) c;
-                    tile.reset();
+                if (cName != null && cName.startsWith(TILE_PREFIX)) {
+                    //if c is a tile
+                    if (c instanceof Tile) {
+                        Tile tile = (Tile) c;
+                        tile.reset();
+                    }
                 }
             }
-
         }
     }
 
@@ -472,7 +481,7 @@ public class GameScreen extends JFrame implements SettableScreenColors,Refreshab
         JMenuBar mb = new JMenuBar();
         //create a JMenu
         JMenu gameMenu = new JMenu("Game");
-        //set the action listener for the menu item's of gameMenu
+        //set the action listener for the menu items of gameMenu
         ActionListener menuListener = new ActionListener() {
 
             @Override
@@ -484,45 +493,60 @@ public class GameScreen extends JFrame implements SettableScreenColors,Refreshab
                     String gameName;
                     //do an action based on the action command received.
                     switch (actionCommand) {
-                        //if "new game" is pressed"
+                        //if "new game" is pressed
                         case "newGame":
                             //reset the gui and the logic
                             reset(gamePanel.getComponents(), true);
                             //then make the changings visibible
                             repaint();
                             break;
+                        //if "save game" is pressed
                         case "saveGame":
                             //save the user decision
-                            gameName = JOptionPane.showInputDialog(thisGS, "Choose the name of the game:", "NewGame1");
+                            gameName = JOptionPane.showInputDialog(thisGS,
+                                    "Choose the name of the game:", "NewGame1");
                             int save;
                             //try to save
-                            save = FileManager.save(grid.getGrid(), grid.getCurrentPlayer(), gameName, player1Name, player2Name);
+                            save = FileManager.save(grid.getGrid(),
+                                    grid.getCurrentPlayer(), gameName,
+                                    player1Name, player2Name);
                             //if something goes wrong
                             if (save != 1) {
                                 String errMsg;
-                                if (save == 0) {
-                                    errMsg = "Name not valid or already taken";
-                                } else if (save == 2) {
-                                    errMsg = "I/O Exception";
-                                } else {
-                                    errMsg = "An error occured";
+                                switch (save) {
+                                    case 0:
+                                        errMsg = "Name not valid or already taken";
+                                        break;
+                                    case 2:
+                                        errMsg = "I/O Exception";
+                                        break;
+                                    //unknown error.
+                                    default:
+                                        errMsg = "An error occured";
+                                        break;
                                 }
-                                JOptionPane.showMessageDialog(thisGS, errMsg, "An error occured", JOptionPane.ERROR_MESSAGE);
+                                JOptionPane.showMessageDialog(thisGS, errMsg,
+                                        "An error occured",
+                                        JOptionPane.ERROR_MESSAGE);
                             }
                             break;
+                        //if load game is pressed.
                         case "loadGame":
                             //save the choise
-                            gameName = JOptionPane.showInputDialog(thisGS, "Choose the name of the game:", "NewGame1");
+                            gameName = JOptionPane.showInputDialog(thisGS,
+                                    "Choose the name of the game:", "Load game",
+                                    JOptionPane.QUESTION_MESSAGE);
                             //try to load the game
                             SavedGame sg = FileManager.load(gameName);
-                            //TO CHECK
                             //if the game has been loaded
                             loadGame(sg);
                             break;
+                        //if options is pressed
                         case "options":
-                            Options o= new Options(thisGS,thisGS);
+                            Options o = new Options(thisGS, thisGS);
                             o.setVisible(true);
                             break;
+                        //if exit is pressed
                         case "exit":
                             //close the window.
                             thisGS.dispose();
@@ -567,7 +591,6 @@ public class GameScreen extends JFrame implements SettableScreenColors,Refreshab
         this.setJMenuBar(mb);
     }
 
-    //TO CHECK
     /**
      * Load a game saved in a given SavedGame
      *
@@ -581,7 +604,7 @@ public class GameScreen extends JFrame implements SettableScreenColors,Refreshab
             if (GameGrid.checkGrid(saveGrid)) {
                 //all ok, save it
                 grid.setGrid(saveGrid);
-                //reset all the gui and logic
+                //resets all the gui
                 reset(gamePanel.getComponents(), false);
                 //check the status of the gui
                 checkStatus();
@@ -609,52 +632,61 @@ public class GameScreen extends JFrame implements SettableScreenColors,Refreshab
                     grid.changeCurrentPlayer();
                 }
                 //get the current player name
-                String currentPlayer = sg.getCurrentPlayer() == 1 ? thisGS.player1Name : thisGS.player2Name;
+                String currentPlayer = sg.getCurrentPlayer() == 1
+                        ? thisGS.player1Name : thisGS.player2Name;
                 //set the title
                 thisGS.setTitle(title + " - " + currentPlayer + "'s turn");
                 repaint();
             } else {
-                JOptionPane.showMessageDialog(thisGS, "Corrupted game", "Impossible to load the game", JOptionPane.ERROR_MESSAGE);
+                JOptionPane.showMessageDialog(thisGS, "Corrupted game",
+                        "Impossible to load the game", JOptionPane.ERROR_MESSAGE);
             }
         } else {
-            JOptionPane.showMessageDialog(thisGS, "Game corrupted or not found", "Impossible to load the game", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(thisGS, "Game corrupted or not found",
+                    "Impossible to load the game", JOptionPane.ERROR_MESSAGE);
         }
     }
 
     /**
-     * Check the status of the GUI grid, and set all the status to corrisponds
-     * to the logic grid.
+     * Check the status of the GUI grid, and set all the status of the tiles to
+     * corrisponds the logic grid.
      */
     private void checkStatus() {
         if (gamePanel != null) {
             Component[] components = gamePanel.getComponents();
-            //search all the tiles
-            for (Component c : components) {
-                String cName = c.getName();
-                if (cName.startsWith(TILE_PREFIX)) {
-                    if (c instanceof Tile) {
-                        Tile tile = (Tile) c;
-                        //split the name
-                        String[] splitted = cName.split(SEPARATOR);
-                        try {
-                            //check the length
-                            if (splitted.length == 3) {
-                                //find the row and column
-                                int row = Integer.parseInt(splitted[1]);
-                                int column = Integer.parseInt(splitted[2]);
-                                //set the status
-                                tile.setStatus(grid.getGrid()[column][row]);
+            if (components != null) {
+                //search all the tiles
+                for (Component c : components) {
+                    String cName = c.getName();
+                    if (cName != null && cName.startsWith(TILE_PREFIX)) {
+                        if (c instanceof Tile) {
+                            Tile tile = (Tile) c;
+                            //split the name
+                            String[] splitted = cName.split(SEPARATOR);
+                            try {
+                                //check the length
+                                if (splitted.length == 3) {
+                                    //find the row and column
+                                    int row = Integer.parseInt(splitted[1]);
+                                    int column = Integer.parseInt(splitted[2]);
+                                    //set the status
+                                    tile.setStatus(grid.getGrid()[column][row]);
+                                }
+                            } catch (NumberFormatException nfe) {
+                                JOptionPane.showMessageDialog(this,
+                                        "Tile name format error",
+                                        "An error occured",
+                                        JOptionPane.ERROR_MESSAGE);
+                                this.dispose();
                             }
-                        } catch (NumberFormatException nfe) {
-                            JOptionPane.showMessageDialog(this, "Tile name format error", "An error occured", JOptionPane.ERROR_MESSAGE);
-                            this.dispose();
                         }
                     }
-                }
 
+                }
             }
         } else {
-            JOptionPane.showMessageDialog(this, "An error occured", "Status Error", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(this, "An error occured",
+                    "Status Error", JOptionPane.ERROR_MESSAGE);
             this.dispose();
         }
     }
@@ -668,7 +700,6 @@ public class GameScreen extends JFrame implements SettableScreenColors,Refreshab
      */
     private void insert(Component[] components, int row, int column) {
         if (components != null) {
-            //TO CHECK (CAMBIATO || in &&)
             if (row >= 0 && column >= 0 && row < GameGrid.Y_SIZE
                     && column < GameGrid.X_SIZE) {
                 for (Component c : components) {

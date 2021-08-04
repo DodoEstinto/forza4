@@ -1,5 +1,6 @@
-package forza4;
+package forza4.IO;
 
+import forza4.logic.GameGrid;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;

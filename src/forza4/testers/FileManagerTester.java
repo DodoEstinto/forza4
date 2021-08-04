@@ -5,9 +5,9 @@
  */
 package forza4.testers;
 
-import forza4.FileManager;
-import forza4.GameGrid;
-import forza4.SavedGame;
+import forza4.IO.FileManager;
+import forza4.logic.GameGrid;
+import forza4.IO.SavedGame;
 import java.io.File;
 
 /**
