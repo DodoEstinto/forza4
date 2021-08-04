@@ -5,8 +5,8 @@
  */
 package forza4.testers;
 
-import forza4.GameScreen;
-import forza4.Tile;
+import forza4.GUI.GameScreen;
+import forza4.GUI.Tile;
 
 /**
  * Tests the tile class.

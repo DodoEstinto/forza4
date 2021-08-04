@@ -3,8 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package forza4;
+package forza4.GUI;
 
+import forza4.interfaces.ScreenColors;
 import java.awt.Color;
 import java.awt.Graphics;
 import javax.swing.JPanel;

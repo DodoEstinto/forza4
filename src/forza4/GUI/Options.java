@@ -3,8 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package forza4;
+package forza4.GUI;
 
+import forza4.interfaces.Refreshable;
+import forza4.interfaces.SettableScreenColors;
 import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
@@ -21,20 +23,41 @@ import javax.swing.JPanel;
 
 /**
  *
- * @author AdSumPro
+ * @author Paossi Davide
  */
 public class Options extends JFrame {
 
+    /**
+     * The panel that contains all the elements.
+     */
     private JPanel mainPanel;
+    /**
+     * The screen colors to change.
+     */
     private SettableScreenColors ssc;
+    /**
+     * Reference to itself.
+     */
     private final Options thisOptions;
+    /**
+     * The screen to refresh.
+     */
     private Refreshable ref;
 
+    /**
+     * Create a Options object with a determined SettableScreenColors and
+     * Refreshable. If one or either of the two are null it will show an error
+     * and dispose itself. Ssc and ref should be the same object.
+     *
+     * @param ssc The screen colors to change.
+     * @param ref The screen to refresh.
+     */
     public Options(SettableScreenColors ssc, Refreshable ref) {
         super();
         this.setSize(700, 500);
         this.setPreferredSize(new Dimension(1000, 1000));
-        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setResizable(false);
+        this.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         this.setTitle("Options");
         init();
         if (ssc == null) {
@@ -54,6 +77,9 @@ public class Options extends JFrame {
         thisOptions = this;
     }
 
+    /**
+     * Init all the components.
+     */
     private void init() {
         mainPanel = new JPanel(new GridLayout(6, 1));
         JLabel label = new JLabel("Select the color to change:");
@@ -64,21 +90,30 @@ public class Options extends JFrame {
         this.add(mainPanel);
     }
 
+    /**
+     * Create a combo box that makes possible to select one of the ssc colors
+     * and add it in the mainPanel.
+     */
     private void createComboBox() {
         JComboBox<String> cb = new JComboBox<>(new String[]{"backgroundColor",
-            "gridColor","borderColor","player1Color", "player2Color"});
+            "gridColor", "borderColor", "player1Color", "player2Color"});
         cb.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
+                boolean stop = false;
                 if (mainPanel != null) {
+                    //get the components and iterate them.
                     Component[] components = mainPanel.getComponents();
                     if (components != null) {
                         for (Component c : components) {
                             String name = c.getName();
                             if (name != null && name.equals("colorShower")) {
                                 if (c instanceof JPanel) {
+                                    //the element is the JPanel that shows
+                                    //the color selected
                                     JPanel colorShower = (JPanel) c;
                                     Color color;
+                                    //initialize color with the selected color
                                     switch (cb.getSelectedItem().toString()) {
                                         case "backgroundColor":
                                             color = ssc.getBackgroundColor();
@@ -100,7 +135,13 @@ public class Options extends JFrame {
                                             break;
                                     }
                                     colorShower.setBackground(color);
+                                    //marks that we found the right component
+                                    stop = true;
                                 }
+                            }
+                            //stop the cicle
+                            if (stop) {
+                                break;
                             }
                         }
                     } else {
@@ -119,14 +160,22 @@ public class Options extends JFrame {
         mainPanel.add(cb);
     }
 
+    /**
+     * Create all the buttons needed and add them to the mainPanel.
+     */
     private void createButtons() {
 
+        //create the button to choose a new color
         JButton chooseColorButton = new JButton("Press here to choose a color");
         chooseColorButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
-                Color selectedColor = JColorChooser.showDialog(null, "Title", Color.red);
+                boolean stop = false;
+                //save the color selection of the user.
+                Color selectedColor = JColorChooser.showDialog(null, "Title",
+                        Color.red);
                 if (mainPanel != null) {
+                    //gets the component and iterate them
                     Component[] components = mainPanel.getComponents();
                     if (components != null) {
                         for (Component c : components) {
@@ -134,8 +183,15 @@ public class Options extends JFrame {
                             if (name != null && name.equals("colorShower")) {
                                 if (c instanceof JPanel) {
                                     JPanel colorShower = (JPanel) c;
+                                    //displays the selected color
                                     colorShower.setBackground(selectedColor);
+                                    //marks that we found the right component
+                                    stop = true;
                                 }
+                            }
+                            //stop the cicle
+                            if (stop) {
+                                break;
                             }
                         }
                     }
@@ -143,6 +199,7 @@ public class Options extends JFrame {
             }
         });
 
+        //create the button to confirm the choosen color
         JButton confirmColorButton = new JButton("Press here to confirm the color");
 
         confirmColorButton.addActionListener(
@@ -150,8 +207,11 @@ public class Options extends JFrame {
             @Override
             public void actionPerformed(ActionEvent ae
             ) {
-                //DA FINIRE
+                boolean stop = false;
                 if (mainPanel != null) {
+                    /*gets all the components and iterate them in order to find
+                    *the color shower.
+                     */
                     Component[] components = mainPanel.getComponents();
                     if (components != null) {
                         for (Component c : components) {
@@ -159,42 +219,53 @@ public class Options extends JFrame {
                             if (name != null && name.equals("colorShower")) {
                                 if (c instanceof JPanel) {
                                     JPanel colorShower = (JPanel) c;
-
+                                    /*gets all the components and iterate them 
+                                     *in order to find the comboBox
+                                     */
                                     for (Component c2 : components) {
                                         name = c2.getName();
                                         if (name != null && name.equals("comboBox")) {
                                             if (c2 instanceof JComboBox) {
                                                 JComboBox cb = (JComboBox) c2;
                                                 Color color = colorShower.getBackground();
+                                                //get the selected color and set it
                                                 switch (cb.getSelectedItem().toString()) {
                                                     case "backgroundColor":
                                                         ssc.setBackgroundColor(color);
-                                                        ref.repaint();
                                                         break;
                                                     case "gridColor":
                                                         ssc.setGridColor(color);
-                                                        ref.repaint();
                                                         break;
                                                     case "borderColor":
                                                         ssc.setBorderColor(color);
-                                                        ref.repaint();
                                                         break;
                                                     case "player1Color":
                                                         ssc.setPlayer1Color(color);
-                                                        ref.repaint();
                                                         break;
                                                     case "player2Color":
                                                         ssc.setPlayer2Color(color);
-                                                        ref.repaint();
                                                         break;
                                                     default:
                                                         break;
                                                 }
+                                                /*marks that we found the right
+                                                component*/
+                                                stop = true;
+                                                //refresh the screen
+                                                ref.repaint();
                                             }
+                                        }
+                                        //stops the second iteration
+                                        if (stop) {
+                                            break;
                                         }
                                     }
 
                                 }
+                            }
+                            //stops the first iteration
+                            if (stop) {
+                                break;
                             }
                         }
                     } else {
@@ -210,7 +281,7 @@ public class Options extends JFrame {
 
             }
         });
-
+        //Create the button that closes the window.
         JButton closeButton = new JButton("Close");
         closeButton.addActionListener(new ActionListener() {
             @Override
@@ -218,12 +289,15 @@ public class Options extends JFrame {
                 thisOptions.dispose();
             }
         });
-
+        //adds all the buttons
         mainPanel.add(chooseColorButton);
         mainPanel.add(confirmColorButton);
         mainPanel.add(closeButton);
     }
 
+    /**
+     * Create the JPanel that shows the selected color.
+     */
     private void createColorShower() {
         JPanel colorShower = new JPanel();
         colorShower.setName("colorShower");

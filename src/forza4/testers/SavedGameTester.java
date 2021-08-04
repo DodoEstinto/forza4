@@ -5,7 +5,7 @@
  */
 package forza4.testers;
 
-import forza4.SavedGame;
+import forza4.IO.SavedGame;
 
 /**
  * Tests the SavedGame class.

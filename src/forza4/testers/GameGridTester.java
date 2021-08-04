@@ -5,7 +5,7 @@
  */
 package forza4.testers;
 
-import forza4.GameGrid;
+import forza4.logic.GameGrid;
 import java.util.ArrayList;
 
 /**

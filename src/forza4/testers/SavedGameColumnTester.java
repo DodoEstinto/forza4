@@ -5,7 +5,7 @@
  */
 package forza4.testers;
 
-import forza4.SavedGameColumn;
+import forza4.IO.SavedGameColumn;
 import java.util.Arrays;
 
 /**
