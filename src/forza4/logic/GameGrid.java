@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package forza4.logic;
 
 import java.util.Arrays;
@@ -17,7 +12,7 @@ import java.util.Arrays;
 public class GameGrid {
 
     /**
-     * The number of column of elements of the grid.
+     * The number of column of the grid.
      */
     public static final int X_SIZE = 7;
     /**
@@ -85,12 +80,13 @@ public class GameGrid {
     }
 
     /**
-     * Give a randomly 1 or 2.
+     * Give a randomly player 1 or player 2.
      *
-     * @return 1 or 2.
+     * @return player 1 or player 2.
      */
     private int randomPlayer() {
-        return (int) ((Math.random() * 2) + 1);
+        int rand = (int) ((Math.random() * 2) + 1);
+        return rand == 1 ? PLAYER_1 : PLAYER_2;
     }
 
     /**
@@ -120,6 +116,7 @@ public class GameGrid {
     private int deepestPiece(int column) {
         int y = 0;
         if (column < grid.length && column >= 0) {
+            //iterate the column top to bottom
             for (y = 0; y < Y_SIZE; y++) {
                 //check for a collision.
                 if (grid[column][y] != 0) {
@@ -129,11 +126,11 @@ public class GameGrid {
         }
         //return the last hole or the hole before the collision.
         return y - 1;
-        //return found ? y-1 : y;
     }
 
     /**
-     * Check the victory.
+     * Check the victory. If the column or the row are invalid it will
+     * return "no win" status.
      *
      * @param column the column of the last inserted piece.
      * @param row the row of the last inserted piece.
@@ -189,8 +186,7 @@ public class GameGrid {
                         return currentPlayer;
                     }
                 }
-                
-                //CHECK THE TIE
+
                 //if no one won check for a tie
                 if (leftPieces == 0) {
                     return TIE;
@@ -211,12 +207,14 @@ public class GameGrid {
      */
     private int checkRight(int column, int row) {
         int ris = 0;
-        while (column < X_SIZE && column >= 0) {
-            if (currentPlayer == grid[column][row]) {
-                ris += 1;
-                column += 1;
-            } else {
-                break;
+        if (row >= 0 && row < Y_SIZE) {
+            while (column < X_SIZE && column >= 0) {
+                if (currentPlayer == grid[column][row]) {
+                    ris += 1;
+                    column += 1;
+                } else {
+                    break;
+                }
             }
         }
         return ris;
@@ -232,12 +230,14 @@ public class GameGrid {
      */
     private int checkLeft(int column, int row) {
         int ris = 0;
-        while (column >= 0 && column < X_SIZE) {
-            if (currentPlayer == grid[column][row]) {
-                ris += 1;
-                column -= 1;
-            } else {
-                break;
+        if (row >= 0 && row < Y_SIZE) {
+            while (column >= 0 && column < X_SIZE) {
+                if (currentPlayer == grid[column][row]) {
+                    ris += 1;
+                    column -= 1;
+                } else {
+                    break;
+                }
             }
         }
         return ris;
@@ -253,12 +253,14 @@ public class GameGrid {
      */
     private int checkUp(int column, int row) {
         int ris = 0;
-        while (row >= 0 && row < Y_SIZE) {
-            if (currentPlayer == grid[column][row]) {
-                ris += 1;
-                row -= 1;
-            } else {
-                break;
+        if (column >= 0 && column < X_SIZE) {
+            while (row >= 0 && row < Y_SIZE) {
+                if (currentPlayer == grid[column][row]) {
+                    ris += 1;
+                    row -= 1;
+                } else {
+                    break;
+                }
             }
         }
         return ris;
@@ -274,12 +276,14 @@ public class GameGrid {
      */
     private int checkDown(int column, int row) {
         int ris = 0;
-        while (row < Y_SIZE && row >= 0) {
-            if (currentPlayer == grid[column][row]) {
-                ris += 1;
-                row += 1;
-            } else {
-                break;
+        if (column >= 0 && column < X_SIZE) {
+            while (row < Y_SIZE && row >= 0) {
+                if (currentPlayer == grid[column][row]) {
+                    ris += 1;
+                    row += 1;
+                } else {
+                    break;
+                }
             }
         }
         return ris;
@@ -394,15 +398,16 @@ public class GameGrid {
      *
      * @return the COPY of the grid.
      */
-    public int[][] getGrid() {        
+    public int[][] getGrid() {
         return copyGrid();
     }
-    
+
     /**
-     * Generate a copy of the grid.
+     * Generate a deep copy of the grid.
+     *
      * @return the copy of the grid.
      */
-    private int[][] copyGrid(){
+    private int[][] copyGrid() {
         int[][] copyGrid = new int[X_SIZE][];
         for (int i = 0; i < X_SIZE; i++) {
             copyGrid[i] = Arrays.copyOf(grid[i], grid[i].length);
@@ -411,8 +416,8 @@ public class GameGrid {
     }
 
     /**
-     * Set a new grid. If the grid is not valid (invalid values) the grid
-     * will not be set.
+     * Set a new grid. If the grid is not valid (invalid values) the grid will
+     * not be set.
      *
      * @param grid the grid to be set.
      * @return true if the grid has been set. False otherwise.
@@ -431,13 +436,11 @@ public class GameGrid {
                 } else {
                     //check how many tiles have been already taken.
                     for (int row : column) {
-                        
-                        //TO CHECK
                         //if the tile is not empty and has a valid value
                         if (row != PLAYER_1 && row != PLAYER_2 && row != VOID) {
                             ris = false;
                             break;
-                        }else if (row != VOID) {
+                        } else if (row != VOID) {
                             tilesTemp--;
                         }
                     }

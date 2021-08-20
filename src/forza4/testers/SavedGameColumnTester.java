@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package forza4.testers;
 
 import forza4.IO.SavedGameColumn;
@@ -10,7 +5,7 @@ import java.util.Arrays;
 
 /**
  *Tests the SavedGameColumn class.
- * @author AdSumPro
+ * @author Paossi Davide
  */
 public class SavedGameColumnTester {
 

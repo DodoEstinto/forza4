@@ -15,7 +15,7 @@ import java.io.ObjectOutputStream;
  */
 public class FileManager {
 
-    /**
+    /** 
      * The path where the files are saved.
      */
     public static final String PATH = "./";
@@ -26,7 +26,8 @@ public class FileManager {
 
     /**
      * Save the status of the actual game into a file. If the player are
-     * invalid, they will be set to standard values.
+     * invalid, they will be set to standard values. If the grid or the gameName 
+     * are not valid the game will not be saved.
      *
      * @param grid the logic grid of the game.
      * @param player the current player
@@ -63,7 +64,6 @@ public class FileManager {
                         try (FileOutputStream out = new FileOutputStream(f)) {
                             //prepare a SavedGame object.
                             SavedGame sg = createSavedGame(grid, player, player1Name, player2Name, gameName);
-
                             try (ObjectOutputStream objOut = new ObjectOutputStream(out)) {
                                 //saves the object in the file.
                                 objOut.writeObject(sg);
@@ -142,12 +142,9 @@ public class FileManager {
 
                     } catch (Exception ex) {
                         ris = null; //set the save as corrupted.
-                        //JOptionPane.showMessageDialog(null, "Corrupted save!", "ERROR", JOptionPane.ERROR_MESSAGE);
                     }
                 }
-            } //else {
-            //JOptionPane.showMessageDialog(null,"Save not found", "ERROR",JOptionPane.ERROR_MESSAGE);
-            //}
+            }
         }
         return ris;
     }

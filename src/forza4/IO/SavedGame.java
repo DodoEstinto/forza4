@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package forza4.IO;
 
 import forza4.logic.GameGrid;
@@ -44,7 +39,7 @@ public class SavedGame implements Serializable {
     }
 
     
-    //TO CHECK
+
     /**
      * Returns the grid, if the grid has problems returns null.
      *

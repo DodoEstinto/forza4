@@ -12,7 +12,8 @@ import javax.swing.JPanel;
 import javax.swing.border.LineBorder;
 
 /**
- *
+ * The Tile class rappresents a Tile of a Connect 4 game.
+ * It handles the status of the tile and his rappresentation.
  * @author Paossi Davide
  */
 public class Tile extends JPanel {
@@ -138,7 +139,7 @@ public class Tile extends JPanel {
         /*
         the first two parameters indicate the top left point of the square 
         that circumscribes the circle. The last two are indicate the size
-        of the circle
+        of the same square.
          */
         g.fillOval((int) (width * DISTANCE_RATIO), (int) (height * DISTANCE_RATIO),
                 (int) (width * CIRCLE_RATIO), (int) (height * CIRCLE_RATIO));

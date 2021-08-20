@@ -54,7 +54,7 @@ public class SavedGameTester {
         System.out.println("Actual: "+sg.getCurrentPlayer());
         
         System.out.println("\n\nSetting an invalid current player:");
-        sg.setCurrentPlayer(4);
+        sg.setCurrentPlayer(464353);
         System.out.println( "Expected: 2");
         System.out.println("Actual: "+sg.getCurrentPlayer());
         

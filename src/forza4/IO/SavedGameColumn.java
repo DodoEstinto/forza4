@@ -10,7 +10,7 @@ import java.io.Serializable;
 import java.util.Arrays;
 
 /**
- * JavaBean needed to save the columns of a game. It helps to serialize all the
+ * Class needed to save the columns of a Connect 4 game. It helps to serialize all the
  * information to be easily saved on a file
  *
  * @author Paossi Davide
@@ -38,7 +38,7 @@ public class SavedGameColumn implements Serializable {
     }
 
     /**
-     * Set the column
+     * Set the column if valid.
      *
      * @param column the column.
      */
@@ -48,7 +48,6 @@ public class SavedGameColumn implements Serializable {
         }
     }
     
-    //TO CHECK
     /**
      * Check if the SavedGameColumn is valid
      *
@@ -56,7 +55,7 @@ public class SavedGameColumn implements Serializable {
      * @return true if the SavedGameColumn is valid, false otherwise.
      */
     public static boolean checkColumn(SavedGameColumn column) {
-        boolean ris=true;
+        boolean ris;
         if(column==null){
             ris=false;
         }else{
@@ -86,7 +85,10 @@ public class SavedGameColumn implements Serializable {
         }
         return ris;
     }
-    
+    /**
+     * Returns a string representation of the object.
+     * @return a string representation of the object.
+     */
     @Override
     public String toString(){
         return Arrays.toString(column);

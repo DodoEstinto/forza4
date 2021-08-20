@@ -499,12 +499,17 @@ public class GameScreen extends JFrame implements SettableScreenColors, Refresha
                             reset(gamePanel.getComponents(), true);
                             //then make the changings visibible
                             repaint();
+                            //get the actual player name
+                            String playerName = grid.getCurrentPlayer() == GameGrid.PLAYER_1 ? player1Name : player2Name;
+                            //set the title
+                            thisGS.setTitle(title + " - " + playerName + "'s turn");
                             break;
                         //if "save game" is pressed
                         case "saveGame":
                             //save the user decision
                             gameName = JOptionPane.showInputDialog(thisGS,
-                                    "Choose the name of the game:", "NewGame1");
+                                    "Choose the name of the game:", "Save Game"
+                                    ,JOptionPane.QUESTION_MESSAGE);
                             int save;
                             //try to save
                             save = FileManager.save(grid.getGrid(),
@@ -592,7 +597,7 @@ public class GameScreen extends JFrame implements SettableScreenColors, Refresha
     }
 
     /**
-     * Load a game saved in a given SavedGame
+     * Load the game saved in a given SavedGame
      *
      * @param sg the saved game
      */

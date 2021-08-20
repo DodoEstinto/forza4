@@ -1,18 +1,18 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package forza4.interfaces;
 
 import java.awt.Color;
 
 /**
- *
- * @author AdSumPro
+ * This interface imposes that the class implementing it can return different
+ * colors.
+ * @author Paossi Davide
  */
 public interface ScreenColors {
-    
+    /**
+     * Returns the background color.
+     * @return the background color.
+     */
     public Color getBackgroundColor();
 
     /**
