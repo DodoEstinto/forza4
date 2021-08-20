@@ -1,13 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package forza4.testers;
 
 import forza4.logic.GameGrid;
 import java.util.ArrayList;
-
 /**
  *Tests the GameGrid class.
  * @author Davide Paossi
@@ -196,7 +190,7 @@ public class GameGridTester {
         }
         System.out.println("Actual player:"+gg.getCurrentPlayer());
         System.out.println("Expected: 2");
-        System.out.println("Actual:");
+        System.out.print("Actual:");
         System.out.println(gg.checkVictory(3,2));
         
     }

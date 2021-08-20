@@ -8,13 +8,14 @@ package forza4;
 import forza4.GUI.GameScreen;
 import forza4.testers.FileManagerTester;
 import forza4.testers.GameGridTester;
+import forza4.testers.GameScreenTester;
 import forza4.testers.SavedGameColumnTester;
 import forza4.testers.SavedGameTester;
 import forza4.testers.TileTester;
 import javax.swing.JOptionPane;
 
 /**
- *
+ * Class needed to start the game.
  * @author Paossi Davide
  */
 public class Starter {
@@ -25,18 +26,22 @@ public class Starter {
       //Options o=new Options(new GameScreen("aa","bb","cc"));
       //o.setVisible(true);
       //GameGridTester.test();
+      //GameScreenTester.test();
       //TileTester.test();
       //SavedGameColumnTester.test();
       //SavedGameTester.test();
       //FileManagerTester.test();
     }
-    
+    /**
+     * Starts the game. Creates a new Gamescreen and sets it to visible.
+     */
     public static void startGame(){
 
-        String Player1Name=JOptionPane.showInputDialog(null,"Come si chiamerà il giocatore 1?", "Title", JOptionPane.INFORMATION_MESSAGE);
-        String Player2Name=JOptionPane.showInputDialog(null,"Come si chiamerà il giocatore 2?", "Title", JOptionPane.INFORMATION_MESSAGE);
+        String Player1Name=JOptionPane.showInputDialog(null,"Come si chiamerà il giocatore 1?", "Scelta nome", JOptionPane.INFORMATION_MESSAGE);
+        String Player2Name=JOptionPane.showInputDialog(null,"Come si chiamerà il giocatore 2?", "Scelta nome", JOptionPane.INFORMATION_MESSAGE);
         GameScreen gs=new GameScreen("Forza 4",Player1Name,Player2Name);
         gs.setVisible(true);
        
     }
+   
 }

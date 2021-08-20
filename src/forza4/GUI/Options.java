@@ -22,7 +22,8 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 /**
- *
+ * The Options class rappresents the options of a Connect 4 game.
+ * It permits to change the colors of the screen.
  * @author Paossi Davide
  */
 public class Options extends JFrame {
@@ -94,7 +95,8 @@ public class Options extends JFrame {
      * Create a combo box that makes possible to select one of the ssc colors
      * and add it in the mainPanel.
      */
-    private void createComboBox() {
+    private void createComboBox() 
+    {
         JComboBox<String> cb = new JComboBox<>(new String[]{"backgroundColor",
             "gridColor", "borderColor", "player1Color", "player2Color"});
         cb.addActionListener(new ActionListener() {
@@ -172,7 +174,7 @@ public class Options extends JFrame {
             public void actionPerformed(ActionEvent ae) {
                 boolean stop = false;
                 //save the color selection of the user.
-                Color selectedColor = JColorChooser.showDialog(null, "Title",
+                Color selectedColor = JColorChooser.showDialog(null, "Color Picker",
                         Color.red);
                 if (mainPanel != null) {
                     //gets the component and iterate them
