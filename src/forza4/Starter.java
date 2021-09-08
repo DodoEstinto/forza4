@@ -1,8 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 package forza4;
 
 import forza4.GUI.GameScreen;
@@ -23,8 +19,6 @@ public class Starter {
     
     public static void main(String[] args){
       Starter.startGame();
-      //Options o=new Options(new GameScreen("aa","bb","cc"));
-      //o.setVisible(true);
       //GameGridTester.test();
       //GameScreenTester.test();
       //TileTester.test();
@@ -37,8 +31,8 @@ public class Starter {
      */
     public static void startGame(){
 
-        String Player1Name=JOptionPane.showInputDialog(null,"Come si chiamerà il giocatore 1?", "Scelta nome", JOptionPane.INFORMATION_MESSAGE);
-        String Player2Name=JOptionPane.showInputDialog(null,"Come si chiamerà il giocatore 2?", "Scelta nome", JOptionPane.INFORMATION_MESSAGE);
+        String Player1Name=JOptionPane.showInputDialog(null,"What's the name of player 1?", "Name Selection", JOptionPane.INFORMATION_MESSAGE);
+        String Player2Name=JOptionPane.showInputDialog(null,"What's the name of player 2?", "Name Selection", JOptionPane.INFORMATION_MESSAGE);
         GameScreen gs=new GameScreen("Forza 4",Player1Name,Player2Name);
         gs.setVisible(true);
        
