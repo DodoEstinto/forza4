@@ -13,7 +13,7 @@ Change directory and enters Forza4/src/forza4 folder and compile the program wit
 
 -$ javac -d ../../build Starter.java GUI/*.java interfaces/*.java IO/*.java logic/*.java testers/*.java
 
-Now move in the new folder where are all the .class with the command
+Now move in the build folder
 
 On windows:
 
@@ -21,7 +21,7 @@ On windows:
 
 On linux:
 
--$ Mkdir ..\..\build
+-$ cd ..\..\build
 
 
 and create the jar
